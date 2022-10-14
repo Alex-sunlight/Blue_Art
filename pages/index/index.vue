@@ -1,17 +1,35 @@
 <template>
-	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
-			<text class="title">{{title}}aa44a</text>
+	<view class="pages-index">
+		<view class="uni-margin-wrap">
+			<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval"
+				:duration="duration">
+				<swiper-item v-for="(item, index) in carousel">
+					<view class="swiper-item">
+						<image class="swiper_img" :src="item.aaa" mode=""></image>
+					</view>
+				</swiper-item>
+				
+			</swiper>
 		</view>
 	</view>
+
 </template>
 
 <script>
 	export default {
 		data() {
 			return {
-				title: 'Hello'
+				carousel: [
+					{
+						aaa: "../../static/image/carousel.jpg"
+					},
+					{
+						aaa: "../../static/image/carousel.jpg"
+					},
+					{
+						aaa: "../../static/image/carousel.jpg"
+					},
+				]
 			}
 		},
 		onLoad() {
@@ -19,34 +37,45 @@
 		},
 		methods: {
 
-		}
+		},
+		onNavigationBarButtonTap(e) {
+			// console.log(e.index);
+			if (e.index == 0) {
+				console.log("第一个按钮");
+			};
+			if (e.index == 1) {
+				console.log("第二个按钮");
+			}
+		},
 	}
 </script>
 
-<style>
-	.content {
+<style lang="scss">
+	.pages-index {
+		width: 100%;
+		height: 100vh;
+		padding-top: 30rpx;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center;
+		background-color: #3972ab;
 	}
 
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
+	.uni-margin-wrap {
+		width: 690rpx;
+		width: 100%;
 	}
 
-	.text-area {
-		display: flex;
-		justify-content: center;
+	.swiper {
+		height: 300rpx;
 	}
 
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
+	.swiper-item {
+		height: 300rpx;
+		text-align: center;
+	}
+	.swiper_img{
+		height: 300rpx;
+		border-radius: 20px 20px;
 	}
 </style>

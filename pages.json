@@ -3,15 +3,35 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "Blue_Art",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [
+						{
+							"index": "0",
+							"text": "\ue69d",
+							"fontSize": "23",
+							"fontSrc": "/static/uniicons.ttf",
+							"float": "left"
+						},
+						{
+							"index": "1",
+							"text": "\ue62a",
+							"fontSize": "23",
+							"fontSrc": "/static/uniicons.ttf",
+							"float": "right"
+						}]
+					
+					}
+				}
 			}
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "#fff",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarBackgroundColor": "#3972ab",
+		"backgroundColor": "#3972ab"
 	},
 	"uniIdRouter": {}
 }
