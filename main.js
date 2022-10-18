@@ -2,6 +2,9 @@ import App from './App'
 
 // #ifndef VUE3
 import Vue from 'vue'
+import ElementUI from 'element-ui'
+import element from './element/index'
+Vue.use(ElementUI)
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({
