@@ -1,5 +1,106 @@
 <template>
+	<!-- 首页 -->
 	<view class="pages-index">
+		<!-- 左侧抽屉 -->
+		<view class="example-body">
+			<uni-drawer ref="showLeft" mode="left" :width="320" @change="change($event,'showLeft')">
+				<view class="drawer_top">
+					<view class="drawer_imgSize_box">
+						<image class="drawer_image" src="../../static/image/stake8.png"></image>
+						<view class="drawer_top_size">
+							<view class="drawer_name">
+								<h3>ikun</h3>
+							</view>
+							<view class="drawer_id">
+								用户账号：3043068032
+							</view>
+						</view>
+					</view>
+					<uni-icons type="forward" size="20" color="#fff"></uni-icons>
+				</view>
+				<!-- 升级 -->
+				<view class="drawer_upgrade">
+				</view>
+				<!-- 资产 -->
+				<view class="drawer_assets">
+					<view class="assets_box">
+						<view class="assets">
+							<h3 style="color: #fff;">0.00</h3>
+							<h6 style="color: #d9d9d9;">总资产</h6>
+						</view>
+						<view class="assets">
+							<h3 style="color: #fff;">0.00</h3>
+							<h6 style="color: #d9d9d9;">可用余额</h6>
+						</view>
+					</view>
+					<view style="width: 80%;margin: 20rpx auto; height: 0.5px;background-color: #fff;opacity: 0.5;">
+						<!-- 线条 -->
+					</view>
+					<view class="assets_box">
+						<view class="assets">
+							<image src="../../static/image/recharge.png" class="iconImg"></image>
+							<h6 style="color: #d9d9d9;">充值</h6>
+						</view>
+						<view class="assets">
+							<image src="../../static/image/withdraw.png" class="iconImg"></image>
+							<h6 style="color: #d9d9d9;">提现</h6>
+						</view>
+					</view>
+				</view>
+				<!-- 功能 -->
+				<view class="drawer_Function">
+					<h5 style="color: #fff;margin: 0 0 0 30rpx;">常用功能</h5>
+					<view style="width: 80%;margin: 20rpx auto; height: 0.5px;background-color: #fff;opacity: 0.5;">
+						<!-- 线条 -->
+					</view>
+					<view class="">
+						<!-- 充值订单 -->
+						<view class="to_order">
+							<view class="order">
+								<image src="../../static/image/Order.png" class="iconImg"></image>
+								<view class="">
+									充值订单
+								</view>
+							</view>
+							<uni-icons type="forward" size="20" color="#fff"></uni-icons>
+						</view>
+						<view style="width: 80%;margin: 20rpx auto; height: 0.5px;background-color: #fff;opacity: 0.5;">
+							<!-- 线条 -->
+						</view>
+					</view>
+					<view class="">
+						<!-- 提现订单 -->
+						<view class="to_order">
+							<view class="order">
+								<image src="../../static/image/WithdrawOrder.png" class="iconImg"></image>
+								<view class="">
+									提现订单
+								</view>
+							</view>
+							<uni-icons type="forward" size="20" color="#fff"></uni-icons>
+						</view>
+						<view style="width: 80%;margin: 20rpx auto; height: 0.5px;background-color: #fff;opacity: 0.5;">
+							<!-- 线条 -->
+						</view>
+					</view>
+					<view class="">
+						<!-- 钱包地址 -->
+						<view class="to_order">
+							<view class="order">
+								<image src="../../static/image/walletAddress.png" class="iconImg"></image>
+								<view class="">
+									钱包地址
+								</view>
+							</view>
+							<uni-icons type="forward" size="20" color="#fff"></uni-icons>
+						</view>
+						<!-- 	<view style="width: 100%;margin-top: 30rpx; height: 0.5px;background-color: #fff;">
+						</view> -->
+					</view>
+				</view>
+			</uni-drawer>
+		</view>
+		<!-- 头部轮播图 -->
 		<view class="uni-margin-wrap">
 			<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval"
 				:duration="duration">
@@ -9,11 +110,27 @@
 					</view>
 				</swiper-item>
 			</swiper>
+			<uni-notice-bar show-icon scrollable text="91严先生最新作品火爆来袭" speed=60 />
 		</view>
+
 		<el-tabs v-model="activeName" @tab-click="handleClick">
-			<el-tab-pane label="质押区" name="first">
+			<el-tab-pane label="7天" name="first">
 				<view v-for="(item, index) in stake" class="stake_area">
-					<image class="stake_area_img" :src="item.bbb"></image>
+					<view class="uni-margin-wrap">
+						<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay"
+							:interval="interval" :duration="duration">
+							<swiper-item>
+								<image class="stake_area_img" :src="item.bbb"></image>
+							</swiper-item>
+							<swiper-item>
+								<image class="stake_area_img" :src="item.bbb"></image>
+							</swiper-item>
+							<swiper-item>
+								<image class="stake_area_img" :src="item.bbb"></image>
+							</swiper-item>
+						</swiper>
+					</view>
+
 					<view class="stake_information">
 						<view class="information_bottom">
 							<h3 class="h3">Doreen</h3>
@@ -29,7 +146,7 @@
 								<view class="priceBox">
 									<image src="../../static/image/usdt.png" class="usdtIcon"></image>
 									<view class="price">
-										19500
+										{{item.usdt}}
 									</view>
 								</view>
 							</view>
@@ -38,7 +155,7 @@
 				</view>
 
 			</el-tab-pane>
-			<el-tab-pane label="拍卖担保区" name="second">
+			<el-tab-pane label="15天" name="second">
 				<view v-for="(item, index) in paimai" class="stake_area">
 					<image class="stake_area_img" :src="item.aaa"></image>
 					<view class="stake_information">
@@ -64,7 +181,7 @@
 					</view>
 				</view>
 			</el-tab-pane>
-			<el-tab-pane label="托管区" name="third">
+			<el-tab-pane label="30天" name="third">
 				<view v-for="(item, index) in tuoguan" class="stake_area">
 					<image class="stake_area_img" :src="item.aaa"></image>
 					<view class="stake_information">
@@ -90,8 +207,34 @@
 					</view>
 				</view>
 			</el-tab-pane>
-			<el-tab-pane label="nft体验区" name="fourth">
+			<el-tab-pane label="45天" name="fourth">
 				<view v-for="(item, index) in nft" class="stake_area">
+					<image class="stake_area_img" :src="item.aaa"></image>
+					<view class="stake_information">
+						<view class="information_bottom">
+							<h3 class="h3">Doreen</h3>
+							<view class="math_box">
+								<view style="display: flex;">
+									<view class="faxingSize">
+										发行量
+									</view>
+									<view class="math">
+										5500
+									</view>
+								</view>
+								<view class="priceBox">
+									<image src="../../static/image/usdt.png" class="usdtIcon"></image>
+									<view class="price">
+										19500
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+			</el-tab-pane>
+			<el-tab-pane label="60天" name="day">
+				<view v-for="(item, index) in day" class="stake_area">
 					<image class="stake_area_img" :src="item.aaa"></image>
 					<view class="stake_information">
 						<view class="information_bottom">
@@ -127,34 +270,47 @@
 			return {
 				carousel: [{
 						aaa: "../../static/image/carousel.jpg",
-						bbb:"../../static/image/6.jpg",
+						bbb: "../../static/image/6.jpg",
 					},
 					{
 						aaa: "../../static/image/carousel.jpg",
-						bbb:"../../static/image/5.jpg",
+						bbb: "../../static/image/5.jpg",
 					},
 					{
 						aaa: "../../static/image/carousel.jpg",
-						bbb:"../../static/image/4.jpg",
+						bbb: "../../static/image/4.jpg",
 					},
 				],
-				stake: [
-					{
+				stake: [{
 						aaa: "../../static/image/stake2.png",
-						bbb:"../../static/image/2.jpg",
+						bbb: "../../static/image/2.jpg",
+						usdt: "200"
 					},
 					{
 						aaa: "../../static/image/stake3.png",
-						bbb:"../../static/image/3.jpg",
+						bbb: "../../static/image/3.jpg",
+						usdt: "400"
 					},
 					{
 						aaa: "../../static/image/stake4.png",
-						bbb:"../../static/image/4.jpg",
+						bbb: "../../static/image/4.jpg",
+						usdt: "600"
 					},
 					{
-							aaa: "../../static/image/stake1.png",
-							bbb:"../../static/image/5.jpg",
-						},
+						aaa: "../../static/image/stake1.png",
+						bbb: "../../static/image/5.jpg",
+						usdt: "800"
+					},
+					{
+						aaa: "../../static/image/stake3.png",
+						bbb: "../../static/image/3.jpg",
+						usdt: "1000"
+					},
+					{
+						aaa: "../../static/image/stake2.png",
+						bbb: "../../static/image/2.jpg",
+						usdt: "1500"
+					},
 				],
 				paimai: [{
 						aaa: "../../static/image/stake5.png"
@@ -195,7 +351,25 @@
 						aaa: "../../static/image/stake14.png"
 					},
 				],
-				activeName: 'first'
+				day: [{
+						aaa: "../../static/image/stake11.png"
+					},
+					{
+						aaa: "../../static/image/stake12.png"
+					},
+					{
+						aaa: "../../static/image/stake13.png"
+					},
+					{
+						aaa: "../../static/image/stake14.png"
+					},
+				],
+				activeName: 'first',
+				indicatorDots: true,
+				autoplay: true,
+				interval: 2000,
+				duration: 500,
+				showLeft: false
 			}
 		},
 		onLoad() {
@@ -203,13 +377,30 @@
 		},
 		methods: {
 			handleClick(tab, event) {
-				console.log(tab, event);
-			}
+				// console.log(tab, event);
+			},
+			intervalChange(e) {
+				this.interval = e.target.value
+			},
+			// 打开窗口
+			showDrawer(e) {
+				this.$refs[e].open()
+			},
+			// 抽屉状态发生变化触发
+			change(e, type) {
+				console.log((type === 'showLeft' ? '左窗口' : '右窗口') + (e ? '打开' : '关闭'));
+				this[type] = e
+			},
+			// 关闭左侧抽屉
+			closeDrawer(e) {
+				this.$refs[e].close()
+			},
 		},
 		onNavigationBarButtonTap(e) {
 			// console.log(e.index);
 			if (e.index == 0) {
 				console.log("第一个按钮");
+				this.showDrawer('showLeft')
 			};
 			if (e.index == 1) {
 				console.log("第二个按钮");
@@ -223,6 +414,11 @@
 
 	/deep/ .el-tabs__item.is-active {
 		color: #fff;
+	}
+
+	/deep/ .el-tabs__nav-scroll {
+		display: flex;
+		justify-content: center;
 	}
 
 	/deep/ .el-tabs__item {
@@ -242,10 +438,13 @@
 		margin: 30rpx 0;
 	}
 
+	.example-body {
+		padding: 10px;
+	}
+
 	.pages-index {
 		width: 100%;
 		min-height: 100vh;
-		padding-top: 30rpx;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -275,7 +474,7 @@
 	.swiper_img {
 		width: 700rpx;
 		height: 300rpx;
-		border-radius: 20px 20px;
+		border-radius: 10px 10px;
 	}
 
 	.stake_area {
@@ -332,5 +531,109 @@
 
 	.price {
 		color: #fff;
+	}
+
+	// 左侧抽屉
+	/deep/ .uni-drawer__content {
+		background-color: #2b5783 !important;
+	}
+
+	.drawer_image {
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 50%;
+		border: 3px solid #fff;
+	}
+
+	.drawer_top {
+		padding: 50rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.drawer_imgSize_box {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.drawer_top_size {
+		margin-left: 20rpx;
+	}
+
+	.drawer_name {
+		color: #fff;
+	}
+
+	.drawer_id {
+		font-size: 10px;
+	}
+
+	.drawer_upgrade {
+		width: 540rpx;
+		height: 200rpx;
+		margin: 0 50rpx;
+		border-radius: 8px;
+		background-color: #3972ab;
+	}
+
+	.drawer_assets {
+		width: 540rpx;
+		height: 300rpx;
+		margin: 20rpx 50rpx;
+		padding-top: 30rpx;
+		border-radius: 8px;
+		background-color: #3972ab;
+	}
+
+	.assets_box {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.assets {
+		width: 50%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	// 功能
+	.drawer_Function {
+		width: 540rpx;
+		height: 430rpx;
+		margin: 20rpx 50rpx;
+		padding-top: 30rpx;
+		border-radius: 8px;
+		background-color: #3972ab;
+	}
+
+	.iconImg {
+		width: 50rpx;
+		height: 50rpx;
+	}
+
+	.to_order {
+		margin-top: 40rpx;
+		padding: 0 30rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.order {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: #fff;
+	}
+
+	.uni-noticebar {
+		height: 70rpx;
+		margin-top: 30rpx;
 	}
 </style>

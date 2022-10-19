@@ -1,11 +1,261 @@
 <template>
-	<view class="">
-		62565455555
+	<view class="pages-my">
+		<view @click="toMaterial()" class="drawer_top">
+			<view class="drawer_imgSize_box">
+				<image class="drawer_image" src="../../static/image/stake8.png"></image>
+				<view class="drawer_top_size">
+					<view class="drawer_name">
+						<h3>ikun</h3>
+					</view>
+					<view class="drawer_id">
+						用户账号：3043068032
+					</view>
+				</view>
+			</view>
+			<uni-icons type="forward" size="20" color="#fff"></uni-icons>
+		</view>
+		<!-- 静态收益 -->
+		<view class="drawer_assets">
+			<h4 style="color: #fff;margin-left: 30rpx;">静态收益</h4>
+			<br>
+			<view class="assets_box">
+				<view class="assets">
+					<h3 style="color: #fff;">0.00</h3>
+					<h6 style="color: #d9d9d9;">昨日收益</h6>
+				</view>
+				<view class="assets">
+					<h3 style="color: #fff;">0.00</h3>
+					<h6 style="color: #d9d9d9;">累计收益</h6>
+				</view>
+			</view>
+		</view>
+		<!-- 功能 -->
+		<view class="drawer_Function">
+			<view class="">
+				<!-- 我的藏品 -->
+				<view @click="toCollect()" class="to_order">
+					<view class="order">
+						<image src="../../static/image/collect.png" class="iconImg"></image>
+						<view class="">
+							我的藏品
+						</view>
+					</view>
+					<uni-icons type="forward" size="20" color="#fff"></uni-icons>
+				</view>
+				<view style="width: 80%;margin: 20rpx auto; height: 0.5px;background-color: #fff;opacity: 0.5;">
+					<!-- 线条 -->
+				</view>
+			</view>
+			<view class="">
+				<!-- 热门资讯 -->
+				<view @click="toNews()" class="to_order">
+					<view class="order">
+						<image src="../../static/image/WithdrawOrder.png" class="iconImg"></image>
+						<view class="">
+							热门资讯
+						</view>
+					</view>
+					<uni-icons type="forward" size="20" color="#fff"></uni-icons>
+				</view>
+				<view style="width: 80%;margin: 20rpx auto; height: 0.5px;background-color: #fff;opacity: 0.5;">
+					<!-- 线条 -->
+				</view>
+			</view>
+			<view class="">
+				<!-- 资质证书 -->
+				<view class="to_order">
+					<view class="order">
+						<image src="../../static/image/Certificate.png" class="iconImg"></image>
+						<view class="">
+							资质证书
+						</view>
+					</view>
+					<uni-icons type="forward" size="20" color="#fff"></uni-icons>
+				</view>
+				<view style="width: 80%;margin: 20rpx auto; height: 0.5px;background-color: #fff;opacity: 0.5;">
+					<!-- 线条 -->
+				</view>
+			</view>
+			<view class="">
+				<!-- 防骗指南 -->
+				<view class="to_order">
+					<view class="order">
+						<image src="../../static/image/guide.png" class="iconImg"></image>
+						<view class="">
+							防骗指南
+						</view>
+					</view>
+					<uni-icons type="forward" size="20" color="#fff"></uni-icons>
+				</view>
+				<view style="width: 80%;margin: 20rpx auto; height: 0.5px;background-color: #fff;opacity: 0.5;">
+					<!-- 线条 -->
+				</view>
+			</view>
+			<view class="">
+				<!-- 关于我们 -->
+				<view class="to_order">
+					<view class="order">
+						<image src="../../static/image/about.png" class="iconImg"></image>
+						<view class="">
+							关于我们
+						</view>
+					</view>
+					<uni-icons type="forward" size="20" color="#fff"></uni-icons>
+				</view>
+				<view style="width: 80%;margin: 20rpx auto; height: 0.5px;background-color: #fff;opacity: 0.5;">
+					<!-- 线条 -->
+				</view>
+			</view>
+			<view class="">
+				<!-- 联系我们 -->
+				<view class="to_order">
+					<view class="order">
+						<image src="../../static/image/connect.png" class="iconImg"></image>
+						<view class="">
+							联系我们
+						</view>
+					</view>
+					<uni-icons type="forward" size="20" color="#fff"></uni-icons>
+				</view>
+				<view style="width: 80%;margin: 20rpx auto; height: 0.5px;background-color: #fff;opacity: 0.5;">
+					<!-- 线条 -->
+				</view>
+			</view>
+			<view class="">
+				<!-- 设置 -->
+				<view class="to_order">
+					<view class="order">
+						<image src="../../static/image/setUp.png" class="iconImg"></image>
+						<view class="">
+							设置
+						</view>
+					</view>
+					<uni-icons type="forward" size="20" color="#fff"></uni-icons>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
+	export default {
+		data() {
+			return {
+				
+			}
+		},
+		onLoad() {
+			
+		},
+		methods:{
+			toMaterial(){
+				uni.navigateTo({
+					url: './material'
+				});
+			},
+			toCollect() {
+				uni.navigateTo({
+					url: './collect'
+				});
+			},
+			toNews() {
+				uni.navigateTo({
+					url: './news'
+				});
+			}
+		}
+	}
 </script>
 
-<style>
+<style lang="scss">
+	.pages-my {
+		width: 100%;
+		min-height: 100vh;
+		padding-bottom: 100rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		background-color: #3972ab;
+	}
+
+	.drawer_top {
+		width: 85%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.drawer_imgSize_box {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.drawer_top_size {
+		margin-left: 20rpx;
+	}
+
+	.drawer_name {
+		color: #fff;
+	}
+
+	.drawer_id {
+		font-size: 10px;
+	}
+
+	.drawer_image {
+		width: 100rpx;
+		height: 100rpx;
+		border-radius: 50%;
+		border: 3px solid #fff;
+	}
+	// 静态收益
+	.drawer_assets {
+		width: 600rpx;
+		height: 200rpx;
+		margin: 20rpx 50rpx;
+		padding-top: 30rpx;
+		border-radius: 8px;
+		background-color: #3e7cba;
+	}
+	.assets_box {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.assets {
+		width: 50%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	// 功能
+	.drawer_Function{
+		width:600rpx;
+		height: 780rpx;
+		margin: 20rpx 50rpx;
+		padding-top: 30rpx;
+		border-radius: 8px;
+		background-color: #3e7cba;
+	}
+	.iconImg{
+		width: 50rpx;
+		height: 50rpx;
+		margin-right: 10rpx;
+	}
+	.to_order{
+		margin-top: 40rpx;
+		padding: 0 30rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.order{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: #fff;
+	}
 </style>
