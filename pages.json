@@ -54,6 +54,12 @@
 			"style": {
 				"navigationBarTitleText": "热门资讯"
 			}
+		},
+		{
+			"path": "pages/my/certificate",
+			"style": {
+				"navigationBarTitleText": "资质证书"
+			}
 		}
 	],
 	"tabBar": {

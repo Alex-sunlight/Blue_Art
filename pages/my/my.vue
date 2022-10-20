@@ -29,6 +29,21 @@
 				</view>
 			</view>
 		</view>
+		<!-- 动态收益 -->
+		<view class="drawer_assets">
+			<h4 style="color: #fff;margin-left: 30rpx;">动态收益</h4>
+			<br>
+			<view class="assets_box">
+				<view class="assets">
+					<h3 style="color: #fff;">0.00</h3>
+					<h6 style="color: #d9d9d9;">昨日收益</h6>
+				</view>
+				<view class="assets">
+					<h3 style="color: #fff;">0.00</h3>
+					<h6 style="color: #d9d9d9;">累计收益</h6>
+				</view>
+			</view>
+		</view>
 		<!-- 功能 -->
 		<view class="drawer_Function">
 			<view class="">
@@ -63,7 +78,7 @@
 			</view>
 			<view class="">
 				<!-- 资质证书 -->
-				<view class="to_order">
+				<view @click="toCertificate()" class="to_order">
 					<view class="order">
 						<image src="../../static/image/Certificate.png" class="iconImg"></image>
 						<view class="">
@@ -162,7 +177,12 @@
 				uni.navigateTo({
 					url: './news'
 				});
-			}
+			},
+			toCertificate() {
+				uni.navigateTo({
+					url: './certificate'
+				});
+			},
 		}
 	}
 </script>
@@ -171,7 +191,7 @@
 	.pages-my {
 		width: 100%;
 		min-height: 100vh;
-		padding-bottom: 100rpx;
+		padding-bottom: 200rpx;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
