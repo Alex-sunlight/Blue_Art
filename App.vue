@@ -6,7 +6,7 @@
 	import lang3 from './common/lang.js';
 	import hwhLang from '@/common/hwh_language.js';
 	import zI18n from '@/uni_modules/z-paging/components/z-paging/js/z-paging-i18n'
-	 
+
 	export default {
 		onLaunch: function() {
 			console.log('App Launch');
@@ -163,10 +163,10 @@
 				if (currentLang2 == 'zh_CN') {
 					zI18n.setLanguage('cn')
 					return lang3.lang.ch
-				}else if (currentLang2 == 'en_US') {
+				} else if (currentLang2 == 'en_US') {
 					zI18n.setLanguage('en')
 					return lang3.lang.en
-				}else{
+				} else {
 					zI18n.setLanguage('en')
 					return lang3.lang.en
 				}
@@ -217,7 +217,6 @@
 </script>
 
 <style lang="scss">
-
 	page {
 		height: 100%;
 		background: #FFFFFF;
@@ -228,7 +227,7 @@
 		justify-content: center;
 	}
 
-	
+
 	.none-txt {
 		margin-top: 30rpx;
 	}
@@ -433,7 +432,7 @@
 		color: #999999 !important;
 	}
 
-	
+
 
 	.car-goods {
 		top: -40rpx;

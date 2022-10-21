@@ -6,18 +6,20 @@
 		<br>
 		<h3 style="width: 100%;text-align: left;margin-left: 20%;color: #fff;">邮箱账号</h3>
 		<br>
-		<input class="uni-input"  focus v-model="email" />
+		<input class="uni-input" focus v-model="email" />
 		<br>
 		<br>
 		<h3 style="width: 100%;text-align: left;margin-left: 20%;color: #fff;">登录密码</h3>
 		<br>
-		<input class="uni-input"  password  v-model="password" />
-		<h6 @tap="onFind()" style="width: 100%;text-align: right;margin-right: 30%;color: #fff;margin-top: 10rpx;">忘记密码？</h6>
+		<input class="uni-input" password v-model="password" />
+		<h6 @tap="onFindX()" style="width: 100%;text-align: right;margin-right: 30%;color: #fff;margin-top: 10rpx;">
+			忘记密码？
+		</h6>
 		<br>
 		<br>
 		<br>
 		<button @click="onSend()" type="primary" class="login_bt">登录</button>
-		<h6 @click="toRegister()" style="width: 100%;text-align: center;color: #007aff;margin-top: 10rpx;">立即注册</h6>
+		<h6 @click="onFind()" style="width: 100%;text-align: center;color: #007aff;margin-top: 10rpx;">立即注册</h6>
 		<!-- <view class="lang-box" @tap="onCheckLang">
 			<image class="lang-icon" v-if="langType=='zh_CN'" src="/static/ch.png" mode=""></image>
 			<image class="lang-icon" v-if="langType=='en_US'" src="/static/us.png" mode=""></image>
@@ -41,11 +43,9 @@
 				langType: 'en_US',
 				confirmPassword: "",
 				inviteCode: "",
-				getHwhLang
 			}
 		},
 		onLoad() {
-
 			const langType = uni.getStorageSync('langType');
 			if (langType && langType != '') {
 				this.langType = langType;
@@ -58,18 +58,15 @@
 				this.codeStr = this.codeNum;
 				this.getCodeTime();
 			};
-
-			app.$post('user/register', {
-					sss: 1
-				})
-				.then(res => {
-					console.log(res)
-				})
 		},
 		methods: {
-
+			// 忘记密码
+			onFindX() {
+				uni.navigateTo({
+					url: './reset'
+				});
+			},
 			onFind() {
-				app.$next('pages/register/register');
 				uni.navigateTo({
 					url: '../register/register'
 				});
@@ -124,17 +121,10 @@
 							uni.setStorageSync('token', res.data.result.token);
 							app.getUserInfo();
 							uni.reLaunch({
-								url: '/pages/drive/drive'
+								url: '../index/index'
 							})
 
 						}
-						// if(res.data.status == 1){
-						// 	this.password = '';
-						// 	this.confirmPassword = '';
-						// 	this.code = '';
-						// 	this.inviteCode ='';
-						// 	this.onType(0)
-						// }
 					})
 			},
 			onCheckLang() {
@@ -157,16 +147,6 @@
 				this.code = ev.detail.value;
 			},
 			onType(type) {
-				// uni.request({
-				//     url:'http://pv.sohu.com/cityjson?ie=utf-8',
-				// 	method:'POST',
-				// 	success: (res) => {
-				//         const reg = /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/;
-				// 		let ip = reg.exec(res.data);
-				// 		console.log('打印ip地址',ip[0]);
-				// 	}
-				// })
-
 				this.type = type
 			},
 			onEmail(ev) {
@@ -181,8 +161,6 @@
 				} else {
 					return true
 				}
-				// var reg=/^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/;
-				// return reg.test(str);
 			},
 			getCode() {
 				this.$refs.code.blur();
@@ -298,14 +276,12 @@
 						if (res.data.status == 1) {
 							this.password = '';
 							uni.setStorageSync('token', res.data.result.token);
-							// const ooo = uni.getStorageSync('token');
-							// 	console.log(ooo,'打印token')
 							app.getUserInfo()
 							if (res.data.result.status == 1) {
 								app.$next('index/active/active');
 							} else if (res.data.result.status == 2) {
 								uni.reLaunch({
-									url: '/pages/drive/drive'
+									url: '../index/index'
 								})
 							};
 
@@ -333,7 +309,8 @@
 		border: 2px solid #fff;
 		border-radius: 10px;
 	}
-	.login_bt{
+
+	.login_bt {
 		width: 500rpx;
 		font-size: 30rpx;
 		border-radius: 10px;

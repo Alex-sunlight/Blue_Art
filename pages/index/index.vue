@@ -265,9 +265,11 @@
 </template>
 
 <script>
+	const app = getApp().globalData
 	export default {
 		data() {
 			return {
+				userInfo: app.userInfo,
 				carousel: [{
 						aaa: "../../static/image/carousel.jpg",
 						bbb: "../../static/image/6.jpg",
@@ -375,7 +377,93 @@
 		onLoad() {
 
 		},
+		created() {
+			uni.$on('reWalletList', () => {
+				this.currencyList = app.currencyList
+			})
+			uni.$on('reDriveList', () => {
+				this.init()
+			})
+			uni.$on('userInfoFinish', () => {
+				setTimeout(() => {
+					this.userInfo = app.userInfo
+					this.$forceUpdate()
+				}, 100)
+			})
+			uni.$on('newUserInfo', () => {
+				app.getUserInfo()
+				this.init()
+			})
+		},
+		onShow() {
+			app.getUserInfo()
+			this.userInfo = app.userInfo
+			let that = this
+			uni.getStorage({
+				key: 'token',
+				success: (res) => {
+					if (res) {
+						that.getVarsion()
+					}
+				},
+				fail: () => {
+					uni.reLaunch({
+						url: '../login/login'
+					})
+				}
+			})
+			uni.getLocation({
+				isHighAccuracy: true,
+				accuracy: 'best',
+				geocode: true,
+				success: (res) => {
+					app.locInfo = res
+				},
+				fail: (err) => {
+					// console.log(err);
+				}
+			});
+			this.lg = app.getLg2()
+		},
 		methods: {
+			getVarsion() {
+				this.progressError = ''
+				let that = this
+				let upLoadUrl = this.baseUrl + '/user/update'
+				let t = parseInt((new Date().getTime() / 1000).toString());
+				let n = Math.floor(Math.random() * 1000) + 1;
+				let s = "drivecar2_" + t.toString() + '_' + n;
+				let sign = app.secret(s);
+				plus.runtime.getProperty(plus.runtime.appid, function(widgetInfo) {
+					// console.log(widgetInfo.version);
+					uni.request({
+						url: upLoadUrl,
+						method: 'GET',
+						data: {
+							version: widgetInfo.version,
+						},
+						header: {
+							'sign': sign
+						},
+						success: (result) => {
+							// console.log(result);
+							if (result.data.status == 1) {
+								// console.log(result.data);
+								that.upUrl = result.data.result.url
+								if (that.upUrl != "") {
+									that.confirm();
+								} else {
+									uni.showTabBar()
+								}
+							}
+						},
+						fail: (e) => {
+							that.progressError = that.lg.drive26
+							// console.log('error');
+						}
+					});
+				});
+			},
 			handleClick(tab, event) {
 				// console.log(tab, event);
 			},
