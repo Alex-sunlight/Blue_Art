@@ -60,6 +60,18 @@
 			"style": {
 				"navigationBarTitleText": "资质证书"
 			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+			"path": "pages/register/register",
+			"style": {
+				"navigationBarTitleText": "注册"
+			}
 		}
 	],
 	"tabBar": {
@@ -80,7 +92,7 @@
 		}]
 	},
 	"globalStyle": {
-		"navigationBarTextStyle": "#fff",
+		// "navigationBarTextStyle": "#fff",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#3972ab",
 		"backgroundColor": "#3972ab"

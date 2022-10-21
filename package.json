@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "element-ui": "^2.15.10"
+    "element-ui": "^2.15.10",
+    "fucking-util": "^0.3.0",
+    "fucking-util-signature-all": "^0.1.1",
+    "uview-ui": "^2.0.34",
+    "zi18nz": "^0.0.7"
   }
 }
