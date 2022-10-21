@@ -20,6 +20,8 @@
 				</view>
 				<!-- 升级 -->
 				<view class="drawer_upgrade">
+					<h4 style="color: gold;margin-right: 120rpx;">初出茅庐</h4>
+					<image src="../../static/image/medal1.png" class="drawer_medal"></image>
 				</view>
 				<!-- 资产 -->
 				<view class="drawer_assets">
@@ -37,9 +39,9 @@
 						<!-- 线条 -->
 					</view>
 					<view class="assets_box">
-						<view class="assets">
+						<view @click="toRecharge()" class="assets">
 							<image src="../../static/image/recharge.png" class="iconImg"></image>
-							<h6 style="color: #d9d9d9;">充值</h6>
+							<h6 style="color: #d9d9d9;">U盾充值</h6>
 						</view>
 						<view class="assets">
 							<image src="../../static/image/withdraw.png" class="iconImg"></image>
@@ -426,6 +428,11 @@
 			this.lg = app.getLg2()
 		},
 		methods: {
+			toRecharge(){
+				uni.navigateTo({
+					url: './recharge'
+				});
+			},
 			getVarsion() {
 				this.progressError = ''
 				let that = this
@@ -663,7 +670,15 @@
 		height: 200rpx;
 		margin: 0 50rpx;
 		border-radius: 8px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		background-color: #3972ab;
+	}
+	.drawer_medal{
+		width: 160rpx;
+		height: 160rpx;
+		margin-right: 10rpx;
 	}
 
 	.drawer_assets {

@@ -78,6 +78,12 @@
 			"style": {
 				"navigationBarTitleText": "修改密码"
 			}
+		},
+		{
+			"path": "pages/index/recharge",
+			"style": {
+				"navigationBarTitleText": "U盾充值"
+			}
 		}
 	],
 	"tabBar": {
