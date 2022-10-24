@@ -6,7 +6,8 @@
 				"navigationBarTitleText": "Blue_Art",
 				"app-plus": {
 					"titleNView": {
-						"buttons": [{
+						"buttons": [
+							{
 								"index": "0",
 								"text": "\ue69d",
 								"fontSize": "23",
@@ -21,7 +22,6 @@
 								"float": "right"
 							}
 						]
-
 					}
 				}
 			}
@@ -31,19 +31,20 @@
 			"style": {
 				"navigationBarTitleText": "首页"
 			}
-		}, {
+		},
+		{
 			"path": "pages/my/my",
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
-
-		}, {
+		},
+		{
 			"path": "pages/my/material",
 			"style": {
 				"navigationBarTitleText": "资料设置"
 			}
 		},
-		 {
+		{
 			"path": "pages/my/collect",
 			"style": {
 				"navigationBarTitleText": "我的藏品"
@@ -86,6 +87,12 @@
 			}
 		},
 		{
+			"path": "pages/index/invite",
+			"style": {
+				"navigationBarTitleText": "邀请注册"
+			}
+		},
+		{
 			"path": "pages/index/aegisTopUp",
 			"style": {
 				"navigationBarTitleText": "U盾充值"
@@ -97,24 +104,26 @@
 				"navigationBarTitleText": "地址回执"
 			}
 		}
-	    
-    ],
+	],
 	"tabBar": {
 		"color": "#a4b0b3", // tab 上的文字默认颜色
 		"selectedColor": "#57b6ff", // tab 上的文字选中时的颜色
 		"borderStyle": "black", // tabbar 上边框的颜色，可选值 black/white
 		"backgroundColor": "#3972ab", // tab 的背景色
-		"list": [{ // 最少2个、最多5个 tab
-			"pagePath": "pages/index/index", // 页面路径，必须在 pages 中先定义
-			"iconPath": "/static/image/index1.png", // 图片路径，icon 大小限制为40kb，建议尺寸为 81px * 81px
-			"selectedIconPath": "/static/image/index2.png", // 选中时的图片路径
-			"text": "首页" // tab 上按钮文字
-		}, {
-			"pagePath": "pages/my/my",
-			"iconPath": "/static/image/my1.png",
-			"selectedIconPath": "/static/image/my2.png",
-			"text": "我的"
-		}]
+		"list": [
+			{ // 最少2个、最多5个 tab
+				"pagePath": "pages/index/index", // 页面路径，必须在 pages 中先定义
+				"iconPath": "/static/image/index1.png", // 图片路径，icon 大小限制为40kb，建议尺寸为 81px * 81px
+				"selectedIconPath": "/static/image/index2.png", // 选中时的图片路径
+				"text": "首页" // tab 上按钮文字
+			},
+			{
+				"pagePath": "pages/my/my",
+				"iconPath": "/static/image/my1.png",
+				"selectedIconPath": "/static/image/my2.png",
+				"text": "我的"
+			}
+		]
 	},
 	"globalStyle": {
 		// "navigationBarTextStyle": "#fff",

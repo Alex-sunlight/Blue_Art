@@ -108,11 +108,11 @@
 				:duration="duration">
 				<swiper-item v-for="(item, index) in carousel">
 					<view class="swiper-item">
-						<image class="swiper_img" :src="item.bbb" mode=""></image>
+						<image class="swiper_img" :src="item.aaa" mode=""></image>
 					</view>
 				</swiper-item>
 			</swiper>
-			<uni-notice-bar show-icon scrollable text="91严先生最新作品火爆来袭" speed=60 />
+			<uni-notice-bar show-icon scrollable text="blueArt最新作品火爆来袭" speed=60 />
 		</view>
 
 		<el-tabs v-model="activeName" @tab-click="handleClick">
@@ -122,13 +122,13 @@
 						<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay"
 							:interval="interval" :duration="duration">
 							<swiper-item>
-								<image class="stake_area_img" :src="item.bbb"></image>
+								<image class="stake_area_img" :src="item.aaa"></image>
 							</swiper-item>
 							<swiper-item>
-								<image class="stake_area_img" :src="item.bbb"></image>
+								<image class="stake_area_img" :src="item.aaa"></image>
 							</swiper-item>
 							<swiper-item>
-								<image class="stake_area_img" :src="item.bbb"></image>
+								<image class="stake_area_img" :src="item.aaa"></image>
 							</swiper-item>
 						</swiper>
 					</view>
@@ -499,6 +499,9 @@
 			};
 			if (e.index == 1) {
 				console.log("第二个按钮");
+				uni.navigateTo({
+					url: './invite'
+				});
 			}
 		},
 	}
