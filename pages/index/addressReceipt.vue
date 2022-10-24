@@ -36,6 +36,9 @@
 			第三方充值需要一定时间,正在等待第三方回执
 		</view>
 		<text class="matters">注意事项</text>
+		<view class="">
+			
+		</view>
 	</view>
 </template>
 
