@@ -2,32 +2,32 @@
 	<view class="pages-news">
 		<uni-list>
 			<!-- 头像显示圆点 -->
-			<uni-list-chat title="91严先生"
-				avatar="../../static/image/6.jpg"
+			<uni-list-chat title="严先生"
+				avatar="../../static/image/stake6.png"
 				note="您收到一条新的消息" time="2020-02-02 20:20" badge-positon="left" badge-text="dot">
 			</uni-list-chat>
-			<uni-list-chat title="91严先生"
-				avatar="../../static/image/5.jpg"
+			<uni-list-chat title="严先生"
+				avatar="../../static/image/stake6.png"
 				note="您收到一条新的消息" time="2020-02-02 20:20" badge-positon="left" badge-text="dot">
 			</uni-list-chat>
-			<uni-list-chat title="91严先生"
-				avatar="../../static/image/4.jpg"
+			<uni-list-chat title="严先生"
+				avatar="../../static/image/stake6.png"
 				note="您收到一条新的消息" time="2020-02-02 20:20" badge-positon="left" badge-text="dot">
 			</uni-list-chat>
-			<uni-list-chat title="91严先生"
-				avatar="../../static/image/2.jpg"
+			<uni-list-chat title="严先生"
+				avatar="../../static/image/stake6.png"
 				note="您收到一条新的消息" time="2020-02-02 20:20" badge-positon="left" badge-text="dot">
 			</uni-list-chat>
-			<uni-list-chat title="91严先生"
-				avatar="../../static/image/3.jpg"
+			<uni-list-chat title="严先生"
+				avatar="../../static/image/stake6.png"
 				note="您收到一条新的消息" time="2020-02-02 20:20" badge-positon="left" badge-text="dot">
 			</uni-list-chat>
-			<uni-list-chat title="91严先生"
-				avatar="../../static/image/4.jpg"
+			<uni-list-chat title="严先生"
+				avatar="../../static/image/stake6.png"
 				note="您收到一条新的消息" time="2020-02-02 20:20" badge-positon="left" badge-text="dot">
 			</uni-list-chat>
-			<uni-list-chat title="91严先生"
-				avatar="../../static/image/5.jpg"
+			<uni-list-chat title="严先生"
+				avatar="../../static/image/stake6.png"
 				note="您收到一条新的消息" time="2020-02-02 20:20" badge-positon="left" badge-text="dot">
 			</uni-list-chat>
 		</uni-list>

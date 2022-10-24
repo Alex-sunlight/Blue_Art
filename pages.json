@@ -84,6 +84,12 @@
 			"style": {
 				"navigationBarTitleText": "U盾充值"
 			}
+		},
+		{
+			"path": "pages/index/invite",
+			"style": {
+				"navigationBarTitleText": "邀请注册"
+			}
 		}
 	],
 	"tabBar": {
