@@ -17,7 +17,7 @@
 		<view class="knowThe">
 			<radio-group @change="chan" class="inp">
 			                        <label>
-			                            <radio  :value="radio"  />我知道了
+			                            <radio  :value="radios"  />我知道了
 			                        </label>
 			                    </radio-group>
 		</view>
@@ -36,8 +36,17 @@
 			第三方充值需要一定时间,正在等待第三方回执
 		</view>
 		<text class="matters">注意事项</text>
-		<view class="">
-			
+		<view class="mattersTi">
+			<text>
+				1.因加密货币机制的特殊性,交易过程中的网络手续费用 (如TRX),请用户自己承担,感谢理解。
+			</text>
+			<text>
+				2.付款成功后请勿点击取消充值。
+			</text>
+			<text>
+				3.加密货币的网络结算时间较长,实际到账时间在5分钟到1个小时左右,请耐心等待到账。若已付款
+				后1小时还未到账,请您截图转账交易成功截图咨询在线客服处理。
+			</text>
 		</view>
 	</view>
 </template>
@@ -46,7 +55,7 @@
 	export default {
 		data() {
 			return {
-				radio:1,
+				radios:'1',
 				addressStatus:false,
 				prepaid:false
 			}
@@ -55,7 +64,9 @@
 		methods:{
 			chan(e) {
 			                this.activeRadio = e.detail.value;
-			
+							if(this.activeRadio == 1) {
+								this.addressStatus=true
+							}
 			                //this.activeRadio存的是选中的Value的值
 			                console.log(this.activeRadio);
 			            }
@@ -199,7 +210,36 @@
 			line-height: 60rpx;
 			font-size: 28rpx;
 			color: #fff;
-			border: 1px solid red;
+			// border: 1px solid red;
+		}
+		.mattersTi {
+			width: 90%;
+			margin: 0 auto;
+			margin-top: 20rpx;
+			height: 290rpx;
+			display: flex;
+			flex-wrap: wrap;
+			border: 1px solid #c0c0c0;
+			border-radius: 12rpx;
+			text {
+				width: 90%;
+				margin: 0 auto;
+			
+				height: 60rpx;
+				line-height: 30rpx;
+				font-size: 24rpx;
+				color: #fff;
+				// border: 1px solid red;
+			}
+			text:nth-of-type(1) {
+				margin-top: 20rpx;
+			}
+			text:nth-of-type(2) {
+				height: 40rpx;
+			}
+			text:nth-of-type(3) {
+				height: 130rpx;
+			}
 		}
 		}
 		

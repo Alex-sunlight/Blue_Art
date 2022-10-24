@@ -43,7 +43,7 @@
 							<image src="../../static/image/recharge.png" class="iconImg"></image>
 							<h6 style="color: #d9d9d9;">U盾充值</h6>
 						</view>
-						<view class="assets">
+						<view @click="toWithdrawal()" class="assets">
 							<image src="../../static/image/withdraw.png" class="iconImg"></image>
 							<h6 style="color: #d9d9d9;">提现</h6>
 						</view>
@@ -57,8 +57,8 @@
 					</view>
 					<view class="">
 						<!-- 充值订单 -->
-						<view class="to_order">
-							<view class="order">
+						<view class="to_order" @click="toOrders()">
+							<view class="order" >
 								<image src="../../static/image/Order.png" class="iconImg"></image>
 								<view class="">
 									充值订单
@@ -72,7 +72,7 @@
 					</view>
 					<view class="">
 						<!-- 提现订单 -->
-						<view class="to_order">
+						<view class="to_order" @click="toOrderss()">
 							<view class="order">
 								<image src="../../static/image/WithdrawOrder.png" class="iconImg"></image>
 								<view class="">
@@ -432,6 +432,21 @@
 				uni.navigateTo({
 					url: './recharge'
 				});
+			},
+			toWithdrawal(){
+				uni.navigateTo({
+					url:'./withdrawal'
+				})
+			},
+			toOrders(){
+				uni.navigateTo({
+					url:'./prepaidOrders'
+				})
+			},
+			toOrderss(){
+				uni.navigateTo({
+					url:'./withdrawalOrder'
+				})
 			},
 			getVarsion() {
 				this.progressError = ''

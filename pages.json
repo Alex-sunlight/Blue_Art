@@ -103,6 +103,24 @@
 			"style": {
 				"navigationBarTitleText": "地址回执"
 			}
+		},
+		{
+			"path": "pages/index/withdrawal",
+			"style": {
+				"navigationBarTitleText": "提现"
+			}
+		},
+		{
+			"path": "pages/index/prepaidOrders",
+			"style": {
+				"navigationBarTitleText": "U盾充值订单"
+			}
+		},
+		{
+			"path": "pages/index/withdrawalOrder",
+			"style": {
+				"navigationBarTitleText": "提现订单"
+			}
 		}
 	],
 	"tabBar": {
