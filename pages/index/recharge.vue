@@ -1,15 +1,51 @@
 <template>
 	<!-- U盾充值 -->
 	<view class="pages-recharge">
-		<br>
-		<br>
-		<h3 style="width: 100%;text-align: left;margin-left: 20%;color: #fff;">充值金额</h3>
-		<br>
-		<input class="uni-input" focus v-model="email" />
+		<h3 class="top-up">充值金额</h3>
+		<input class="inp" type="number" placeholder="请输入充值金额" v-model="aegisAmount">
+		<h3 class="top-up">- U盾充值规则 -</h3>
+		<view class="guiZe">
+			<text>
+				1.充值金额不可低于200USDT.
+			</text>
+			<text>
+				2.请一次性转账您所输入的充值金额,不可多地址或多次转账.
+			</text>
+			<text>
+				3.为了您的资金安全,目前U盾充值单笔最大金额为20000USDT.
+			</text>
+			<text>
+				4.超出或低于限额会到账充值失败,失败财产无法退回.
+			</text>
+			<text>
+				5.U盾充值仅支持波场链TRC20转账.
+			</text>
+			<text>
+				6.本规则最终解释权由REVA所有.
+			</text>
+		</view>
+		<view class="btn" @click="aegis()">
+			申请地址
+		</view>
 	</view>
 </template>
 
 <script>
+	export default {
+		data() {
+			return {
+				aegisAmount:0
+			}
+			
+		},
+		methods:{
+			aegis(){
+				uni.navigateTo({
+					url: './aegisTopUp'
+				});
+			},
+		}
+	}
 </script>
 
 <style lang="scss">
@@ -20,14 +56,79 @@
 		flex-direction: column;
 		align-items: center;
 		background-color: #3972ab;
+		.top-up {
+			margin: 0 auto;
+			width: 90%;
+			height: 80rpx;
+			margin-top: 70rpx;
+			line-height: 80rpx;
+			color: #fff;
+			font-weight: 400;
+			font-size: 32rpx;
+			// border: 1px solid red;
+		}
+		.top-up:nth-of-type(2) {
+			margin-top: 20rpx;
+		}
+		.inp {
+			width: 85%;
+			height: 90rpx;
+			margin-top: 20rpx;
+			font-size: 32rpx;
+			padding-left: 5%;
+			color: #fff;
+			border: 1px solid #C0C0C0;
+			border-radius: 12rpx;
+			// background-color: ;
+		}
+		.guiZe {
+			margin: 0 auto;
+			width: 90%;
+			height: 680rpx;
+			display: flex;
+			flex-wrap: wrap;
+			border: 1px solid #C0C0C0;
+			border-radius: 6rpx;
+			text {
+				margin: 0 auto;
+				width: 90%;
+				height: 60rpx;
+				line-height: 60rpx;
+				color: #fff;
+				// border: 1px solid red;
+			}
+			text:nth-of-type(1) {
+				margin-top: 20rpx;
+			}
+			text:nth-of-type(2) {
+				height: 80rpx;
+				line-height: 40rpx;
+			}
+			text:nth-of-type(3) {
+				height: 80rpx;
+				line-height: 40rpx;
+			}
+			text:nth-of-type(4) {
+				height: 80rpx;
+				line-height: 40rpx;
+			}
+		}
+		.btn {
+			margin: 0 auto;
+			position: fixed;
+			bottom: 5%;
+			width: 90%;
+			height: 80rpx;
+			text-align: center;
+			font-size: 16px;
+			line-height: 80rpx;
+			color: #fff;
+			background-color: #00FFFF;
+			// border: 1px solid red;
+			border-radius: 6px;
+		}
 	}
-	.uni-input {
-		width: 500rpx;
-		height: 60rpx;
-		color: #fff;
-		border: 2px solid #fff;
-		border-radius: 10px;
-	}
+	
 
 	
 </style>
