@@ -117,6 +117,12 @@
 			}
 		},
 		{
+			"path": "pages/index/prepaidDetails",
+			"style": {
+				"navigationBarTitleText": "U盾充值订单"
+			}
+		},
+		{
 			"path": "pages/index/withdrawalOrder",
 			"style": {
 				"navigationBarTitleText": "提现订单"

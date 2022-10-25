@@ -11,7 +11,7 @@
 				本次需充值
 			</text>
 			<text>
-				300USDT
+				{{priceNumber}}USDT
 			</text>
 		</view>
 		<view class="knowThe">
@@ -23,14 +23,14 @@
 		</view>
 		<view class="address" v-if="addressStatus">
 			<text>充值地址</text>
-			<text>TKcjsfhVBGFfHr317TLijGK99Qryao274G</text>
-			<text>
+			<text>{{prepaidAddress}}</text>
+			<text @click="paste(prepaidAddress)">
 				复制地址
 			</text>
 		</view>
 		<view class="topupOption">
-			<text>取消充值</text>
-			<text>我已充值</text>
+			<!-- <text>取消充值</text> -->
+			<text @click="prepaids()">我已充值</text>
 		</view>
 		<view class="hasPrepaid" v-if="prepaid">
 			第三方充值需要一定时间,正在等待第三方回执
@@ -57,10 +57,22 @@
 			return {
 				radios:'1',
 				addressStatus:false,
-				prepaid:false
+				prepaid:false,
+				options:null,
+				priceNumber:null,
+				prepaidAddress:null,
 			}
 			
 		},
+		onLoad(option) {
+			this.options= JSON.parse(option.data)
+				console.log("充值传参", this.options)
+				if (this.options != null) {
+				   this.priceNumber=this.options.amount
+				   this.prepaidAddress = this.options.address
+				   console.log('打印传值金额',this.options.amount);
+				}
+			},
 		methods:{
 			chan(e) {
 			                this.activeRadio = e.detail.value;
@@ -69,7 +81,34 @@
 							}
 			                //this.activeRadio存的是选中的Value的值
 			                console.log(this.activeRadio);
-			            }
+			            },
+			// 我已充值
+			prepaids(){
+				this.prepaid = !this.prepaid
+			},
+			// 复制功能
+			
+			paste(value) {
+						uni.setClipboardData({
+							data: value,
+							success: function() {
+								uni.showToast({
+									title: '复制成功',
+									icon: 'none',
+									duration: 3000
+								});
+								return true;
+							},
+							fail: function() {
+								uni.showToast({
+									title: '复制失败',
+									icon: 'none',
+									duration: 2000
+								});
+								return false;
+							}
+						});
+			}
 	
 		}
 	}

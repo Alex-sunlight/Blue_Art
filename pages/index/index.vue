@@ -58,7 +58,7 @@
 					<view class="">
 						<!-- 充值订单 -->
 						<view class="to_order" @click="toOrders()">
-							<view class="order" >
+							<view class="order">
 								<image src="../../static/image/Order.png" class="iconImg"></image>
 								<view class="">
 									充值订单
@@ -428,24 +428,44 @@
 			this.lg = app.getLg2()
 		},
 		methods: {
-			toRecharge(){
-				uni.navigateTo({
-					url: './recharge'
-				});
+			toRecharge() {
+				app.$get('wallet/getLastRecharge')
+					.then(res => {
+						console.log('打印查询未完成订单数据', res.data.result.data);
+						// address
+						if (res.data.result.flag == 1) {
+							let datas = {
+								id:res.data.result.data.id,
+								address:res.data.result.data.address,
+								amount:res.data.result.data.ys_amount,
+								ordersn:res.data.result.data.ordersn,
+
+							}
+							// JSON.stringify(res.data.result.data.address)
+							uni.navigateTo({
+								url: '../../pages/index/addressReceipt?data='+JSON.stringify(datas)
+							});
+						}
+						if (res.data.result.flag == 2) {
+							uni.navigateTo({
+								url: './recharge'
+							});
+						}
+					})
 			},
-			toWithdrawal(){
+			toWithdrawal() {
 				uni.navigateTo({
-					url:'./withdrawal'
+					url: './withdrawal'
 				})
 			},
-			toOrders(){
+			toOrders() {
 				uni.navigateTo({
-					url:'./prepaidOrders'
+					url: './prepaidOrders'
 				})
 			},
-			toOrderss(){
+			toOrderss() {
 				uni.navigateTo({
-					url:'./withdrawalOrder'
+					url: './withdrawalOrder'
 				})
 			},
 			getVarsion() {
@@ -693,7 +713,8 @@
 		align-items: center;
 		background-color: #3972ab;
 	}
-	.drawer_medal{
+
+	.drawer_medal {
 		width: 160rpx;
 		height: 160rpx;
 		margin-right: 10rpx;

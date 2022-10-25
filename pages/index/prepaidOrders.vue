@@ -8,22 +8,22 @@
 			<option value="">拒绝审核</option>
 		</select>
 		<view class="prepaidList">
-			<view class="uAegisList">
+			<view class="uAegisList" @click="prepiDetails(item)" v-for="(item, index) in prepaidDataList" :key = "index">
 				<image src="../../static/image/usdt.png" mode=""></image>
 				<view class="uDun">
 					<text>
 						U盾充值
 					</text>
 					<text>
-						2022-10-22 10:45:52
+						{{item.create_at}}
 					</text>
 				</view>
 				<view class="priceStatus">
 					<text>
-						300
+						{{item.amount}}
 					</text>
 					<text>
-						已取消
+						{{item.status == 0?'待充值':'充值成功'}}
 					</text>
 				</view>
 			</view>
@@ -32,12 +32,18 @@
 </template>
 
 <script>
+		const app = getApp().globalData;
 	export default {
 		data() {
 			return {
-				aegisAmount:0
+				aegisAmount:0,
+				prepaidDataList:null
 			}
 			
+		},
+		onLoad() {
+			// this.queryOrder()
+			this.prepaidList()
 		},
 		methods:{
 			aegis(){
@@ -45,6 +51,36 @@
 					url: './aegisTopUp'
 				});
 			},
+			// 获取充值订单列表
+			prepaidList(){
+				app.$get('wallet/rechargeOrderList')
+					.then(res => {
+						console.log('获取充值订单列表', res.data.result);
+						// address
+						this.prepaidDataList = res.data.result.data
+					})
+			},
+			// 充值订单详情
+			prepiDetails(val){
+				let datas = {
+					amount:val.amount,
+					create_at:val.create_at,
+					currency_id:val.amount,
+					fee:val.fee,
+					id:val.id,
+					ordersn:val.ordersn,
+					status:val.status,
+					tradeId:val.tradeId,
+					trans_hash: val.trans_hash,
+					user_id:val.user_id,
+					wallet_id:val.wallet_id,
+					ys_amount:val.ys_amount
+				}
+				// JSON.stringify(res.data.result.data.address)
+				uni.navigateTo({
+					url: '../../pages/index/prepaidDetails?data='+JSON.stringify(datas)
+				});
+			}
 		}
 	}
 </script>
