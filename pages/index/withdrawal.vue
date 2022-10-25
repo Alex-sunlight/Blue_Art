@@ -20,7 +20,7 @@
 		</text>
 		<view class="withdrawalAmount">
 			<view class="tiXian">
-				<input type="text" placeholder="请输入金额">
+				<input type="text" placeholder="请输入金额" v-model="aegisAmount" @blur="topupAmount()">
 				<text>全部提现</text>
 			</view>
 			<view class="tiXians">
@@ -39,18 +39,53 @@
 </template>
 
 <script>
+	const app = getApp().globalData;
 	export default {
 		data() {
 			return {
-				aegisAmount:0
+				aegisAmount:0,
+				rechargeData:null,
+				aegisAmount:0,
 			}
 			
+		},
+		onLoad() {
+			this.awalLimit()
 		},
 		methods:{
 			aegis(){
 				uni.navigateTo({
 					url: './aegisTopUp'
 				});
+			},
+			// 获取提现下限
+			awalLimit(){
+					app.$get('wallet/moneyConfig')
+							.then(res => {
+								console.log('获取充值或提现配置',res.data.result.config[0].withdraw_lower_limit);
+								this.rechargeData = res.data.result.config[0].withdraw_lower_limit
+								console.log('获取充值下限',this.rechargeData);
+								// if(res.data.result.flag == 1) {
+								// 	uni.navigateTo({
+								// 		url: './addressReceipt'
+								// 	});
+								// }
+								// if(res.data.result.flag == 2) {
+									
+								// }
+							})
+					
+				
+			},
+			// 提现金额对比提现下限
+			topupAmount(){
+				if(this.aegisAmount < this.rechargeData) {
+					uni.showToast({
+					    title: '提现金额小于提现下限',
+					    duration: 2000,
+						icon:'none'
+					})
+				}
 			},
 		}
 	}
