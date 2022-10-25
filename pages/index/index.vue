@@ -113,13 +113,13 @@
 						</view>
 					</swiper-item>
 				</swiper>
-				<uni-notice-bar show-icon scrollable :text="announcement" speed=60 />
+				<uni-notice-bar show-icon scrollable :text="announcement" :speed="speed" />
 			</view>
 
-			<el-tabs v-model="activeName" @tab-click="handleClick">
-				<el-tab-pane @click="toIndex(item)" v-for="(item, index) in product" :label="item.name"
-					:name="item.english_name">
-					<view @click="toDetails(items)" v-for="(items, index) in stake" class="stake_area">
+			<el-tabs v-model="stake_id" @tab-click="handleClick">
+				<el-tab-pane  v-for="(item, index) in product" :label="item.name"
+					:name="item.id" @click="toIndex(item)">
+					<view @click="toDetails(items)" v-for="(items, indexs) in stake" class="stake_area">
 						{{item.id}}
 						<view class="uni-margin-wrap">
 							<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay"
@@ -127,24 +127,18 @@
 								<swiper-item>
 									<image class="stake_area_img" :src="items.image"></image>
 								</swiper-item>
-								<!-- 	<swiper-item>
-								<image class="stake_area_img" :src="item.aaa"></image>
-							</swiper-item>
-							<swiper-item>
-								<image class="stake_area_img" :src="item.aaa"></image>
-							</swiper-item> -->
 							</swiper>
 						</view>
 						<view class="stake_information">
 							<view class="information_bottom">
-								<h3 class="h3">Doreen</h3>
+								<h3 class="h3">{{items.name}}</h3>
 								<view class="math_box">
 									<view style="display: flex;">
 										<view class="faxingSize">
 											发行量
 										</view>
 										<view class="math">
-											5500
+											{{items.fx_num}}
 										</view>
 									</view>
 									<view class="priceBox">
@@ -171,103 +165,8 @@ export default {
 	data() {
 		return {
 			userInfo: app.userInfo,
-			carousel: [{
-				aaa: "../../static/image/carousel.jpg",
-				bbb: "../../static/image/6.jpg",
-			},
-			{
-				aaa: "../../static/image/carousel.jpg",
-				bbb: "../../static/image/5.jpg",
-			},
-			{
-				aaa: "../../static/image/carousel.jpg",
-				bbb: "../../static/image/4.jpg",
-			},
-			],
-			stake: [{
-				aaa: "../../static/image/stake2.png",
-				bbb: "../../static/image/2.jpg",
-				usdt: "200"
-			},
-			{
-				aaa: "../../static/image/stake3.png",
-				bbb: "../../static/image/3.jpg",
-				usdt: "400"
-			},
-			{
-				aaa: "../../static/image/stake4.png",
-				bbb: "../../static/image/4.jpg",
-				usdt: "600"
-			},
-			{
-				aaa: "../../static/image/stake1.png",
-				bbb: "../../static/image/5.jpg",
-				usdt: "800"
-			},
-			{
-				aaa: "../../static/image/stake3.png",
-				bbb: "../../static/image/3.jpg",
-				usdt: "1000"
-			},
-			{
-				aaa: "../../static/image/stake2.png",
-				bbb: "../../static/image/2.jpg",
-				usdt: "1500"
-			},
-			],
-			paimai: [{
-				aaa: "../../static/image/stake5.png"
-			},
-			{
-				aaa: "../../static/image/stake6.png"
-			},
-			{
-				aaa: "../../static/image/stake15.png"
-			},
-			{
-				aaa: "../../static/image/stake16.png"
-			},
-			],
-			tuoguan: [{
-				aaa: "../../static/image/stake7.png"
-			},
-			{
-				aaa: "../../static/image/stake8.png"
-			},
-			{
-				aaa: "../../static/image/stake9.png"
-			},
-			{
-				aaa: "../../static/image/stake10.png"
-			},
-			],
-			nft: [{
-				aaa: "../../static/image/stake11.png"
-			},
-			{
-				aaa: "../../static/image/stake12.png"
-			},
-			{
-				aaa: "../../static/image/stake13.png"
-			},
-			{
-				aaa: "../../static/image/stake14.png"
-			},
-			],
-			day: [{
-				aaa: "../../static/image/stake11.png"
-			},
-			{
-				aaa: "../../static/image/stake12.png"
-			},
-			{
-				aaa: "../../static/image/stake13.png"
-			},
-			{
-				aaa: "../../static/image/stake14.png"
-			},
-			],
-			activeName: 1,
+			activeName: "1",
+			speed: 60,
 			indicatorDots: true,
 			autoplay: true,
 			interval: 2000,
@@ -435,7 +334,7 @@ export default {
 		getNftByStakeId() {
 			try {
 				app.$get('nft/getNftByStakeId', {
-					stake_id: 1,
+					stake_id: this.stake_id,
 					page: 1,
 					size: 10
 				}).then(res => {
