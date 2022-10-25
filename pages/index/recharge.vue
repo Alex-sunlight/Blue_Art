@@ -2,7 +2,7 @@
 	<!-- U盾充值 -->
 	<view class="pages-recharge">
 		<h3 class="top-up">充值金额</h3>
-		<input class="inp" type="number" placeholder="请输入充值金额" v-model="aegisAmount">
+		<input class="inp" type="number" placeholder="请输入充值金额" v-model="aegisAmount" @blur="topupAmount()">
 		<h3 class="top-up">- U盾充值规则 -</h3>
 		<view class="guiZe">
 			<text>
@@ -31,19 +31,120 @@
 </template>
 
 <script>
+		const app = getApp().globalData;
 	export default {
 		data() {
 			return {
-				aegisAmount:0
+				aegisAmount:0,
+				rechargeData:null,
 			}
 			
 		},
+		onLoad() {
+			// this.queryOrder()
+			this.accessPrepaid()
+		},
 		methods:{
-			aegis(){
-				uni.navigateTo({
-					url: './aegisTopUp'
-				});
+			
+			// 获取充值或提现配置
+			accessPrepaid(){
+				app.$get('wallet/moneyConfig')
+						.then(res => {
+							console.log('获取充值或提现配置',res.data.result.config[0].recharge_lower_limit);
+							this.rechargeData = res.data.result.config[0].recharge_lower_limit
+							console.log('获取充值下限',this.rechargeData);
+							// if(res.data.result.flag == 1) {
+							// 	uni.navigateTo({
+							// 		url: './addressReceipt'
+							// 	});
+							// }
+							// if(res.data.result.flag == 2) {
+								
+							// }
+						})
+				
 			},
+			// 充值金额对比充值下限
+			topupAmount(){
+				if(this.aegisAmount < this.rechargeData) {
+					uni.showToast({
+					    title: '充值金额小于充值下限',
+					    duration: 2000,
+						icon:'none'
+					})
+				}
+			},
+			// 申请地址
+			// applyAddress(){
+				
+			// },
+			// 申请地址
+			aegis(){
+				if(this.aegisAmount < this.rechargeData) {
+					uni.showToast({
+					    title: '充值金额小于充值下限',
+					    duration: 2000,
+						icon:'none'
+					})
+					return
+				}
+				uni.showLoading({
+								title: 'loading...'
+							});
+				const data = {
+					amount: this.aegisAmount,
+				};
+				app.$post('wallet/udunRecharg', data)
+									.then(res => {
+										console.log('打印申请地址参数',res.data);
+										if(res.data.status ==1) {
+											let datas = {
+												address:res.data.result.address,
+												amount:this.aegisAmount,
+											}
+											uni.navigateTo({
+												url: '../../pages/index/addressReceipt?data='+JSON.stringify(datas)
+											});
+											uni.hideLoading();
+										}
+									})
+				
+				// uni.navigateTo({
+				// 	url: './aegisTopUp'
+				// });
+			},
+			queryOrder(){
+				// app.$post('user/register', data)
+				// 					.then(res => {
+				// 						console.log(res)
+				// 						app.$tips(res.data.info);
+				// 						if (res.data.status == 1) {
+				// 							this.password = '';
+				// 							this.confirmPassword = '';
+				// 							this.code = '';
+				// 							this.inviteCode = '';
+				// 							uni.setStorageSync('token', res.data.result.token);
+				// 							app.getUserInfo();
+				// 							uni.reLaunch({
+				// 								url: '../index/index'
+				// 							})
+				
+				// 						}
+				// 					})
+				// app.$get('wallet/getLastRecharge')
+				// 		.then(res => {
+				// 			console.log('打印查询未完成订单数据',res.data.result);
+				// 			if(res.data.result.flag == 1) {
+				// 				uni.navigateTo({
+				// 					url: './addressReceipt'
+				// 				});
+				// 			}
+				// 			if(res.data.result.flag == 2) {
+								
+				// 			}
+				// 		})
+				// }
+			}
 		}
 	}
 </script>
@@ -84,7 +185,7 @@
 		.guiZe {
 			margin: 0 auto;
 			width: 90%;
-			height: 680rpx;
+			height: 520rpx;
 			display: flex;
 			flex-wrap: wrap;
 			border: 1px solid #C0C0C0;
@@ -94,6 +195,7 @@
 				width: 90%;
 				height: 60rpx;
 				line-height: 60rpx;
+				font-size: 24rpx;
 				color: #fff;
 				// border: 1px solid red;
 			}
@@ -101,7 +203,7 @@
 				margin-top: 20rpx;
 			}
 			text:nth-of-type(2) {
-				height: 80rpx;
+				height: 60rpx;
 				line-height: 40rpx;
 			}
 			text:nth-of-type(3) {
@@ -109,7 +211,7 @@
 				line-height: 40rpx;
 			}
 			text:nth-of-type(4) {
-				height: 80rpx;
+				height: 60rpx;
 				line-height: 40rpx;
 			}
 		}
