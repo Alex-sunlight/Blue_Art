@@ -20,7 +20,7 @@
 				</view>
 				<view class="priceStatus">
 					<text>
-						{{item.amount}}
+						{{item.ys_amount}}
 					</text>
 					<text>
 						{{item.status == 0?'待充值':'充值成功'}}
