@@ -1,6 +1,6 @@
 <template>
 	<view class="pages-my">
-		<view @click="toMaterial()" class="drawer_top">
+		<view @click="ProfileSettings()" class="drawer_top">
 			<view class="drawer_imgSize_box">
 				<image class="drawer_image" src="../../static/image/stake8.png"></image>
 				<view class="drawer_top_size">
@@ -138,7 +138,7 @@
 			</view>
 			<view class="">
 				<!-- 设置 -->
-				<view class="to_order">
+				<view @tap="toSettings()" class="to_order">
 					<view class="order">
 						<image src="../../static/image/setUp.png" class="iconImg"></image>
 						<view class="">
@@ -163,9 +163,10 @@
 			
 		},
 		methods:{
-			toMaterial(){
+			
+			ProfileSettings(){
 				uni.navigateTo({
-					url: './material'
+					url: '../settings/ProfileSettings'
 				});
 			},
 			toCollect() {
@@ -181,6 +182,11 @@
 			toCertificate() {
 				uni.navigateTo({
 					url: './certificate'
+				});
+			},
+			toSettings() {
+				uni.navigateTo({
+					url: '../settings/settings'
 				});
 			},
 		}

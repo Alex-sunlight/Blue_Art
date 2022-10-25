@@ -102,166 +102,65 @@
 				</view>
 			</uni-drawer>
 		</view>
-		<!-- 头部轮播图 -->
-		<view class="uni-margin-wrap">
-			<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval"
-				:duration="duration">
-				<swiper-item v-for="(item, index) in carousel">
-					<view class="swiper-item">
-						<image class="swiper_img" :src="item.aaa" mode=""></image>
-					</view>
-				</swiper-item>
-			</swiper>
-			<uni-notice-bar show-icon scrollable text="blueArt最新作品火爆来袭" speed=60 />
-		</view>
+		<z-paging ref="paging" refresher-only @onRefresh="onRefresh">
+			<!-- 头部轮播图 -->
+			<view class="uni-margin-wrap">
+				<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay"
+					:interval="interval" :duration="duration">
+					<swiper-item v-for="(item, index) in carousel">
+						<view class="swiper-item">
+							<image class="swiper_img" :src="item.image" mode=""></image>
+						</view>
+					</swiper-item>
+				</swiper>
+				<uni-notice-bar show-icon scrollable :text="announcement" speed=60 />
+			</view>
 
-		<el-tabs v-model="activeName" @tab-click="handleClick">
-			<el-tab-pane label="7天" name="first">
-				<view v-for="(item, index) in stake" class="stake_area">
-					<view class="uni-margin-wrap">
-						<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay"
-							:interval="interval" :duration="duration">
-							<swiper-item>
+			<el-tabs v-model="activeName" @tab-click="handleClick">
+				<el-tab-pane @click="toIndex(item)" v-for="(item, index) in product" :label="item.name"
+					:name="item.english_name">
+					<view @click="toDetails(items)" v-for="(items, index) in stake" class="stake_area">
+						{{item.id}}
+						<view class="uni-margin-wrap">
+							<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay"
+								:interval="interval" :duration="duration">
+								<swiper-item>
+									<image class="stake_area_img" :src="items.image"></image>
+								</swiper-item>
+								<!-- 	<swiper-item>
 								<image class="stake_area_img" :src="item.aaa"></image>
 							</swiper-item>
 							<swiper-item>
 								<image class="stake_area_img" :src="item.aaa"></image>
-							</swiper-item>
-							<swiper-item>
-								<image class="stake_area_img" :src="item.aaa"></image>
-							</swiper-item>
-						</swiper>
+							</swiper-item> -->
+							</swiper>
+						</view>
+						<view class="stake_information">
+							<view class="information_bottom">
+								<h3 class="h3">Doreen</h3>
+								<view class="math_box">
+									<view style="display: flex;">
+										<view class="faxingSize">
+											发行量
+										</view>
+										<view class="math">
+											5500
+										</view>
+									</view>
+									<view class="priceBox">
+										<image src="../../static/image/usdt.png" class="usdtIcon"></image>
+										<view class="price">
+											{{items.price}}
+										</view>
+									</view>
+								</view>
+							</view>
+						</view>
 					</view>
+				</el-tab-pane>
 
-					<view class="stake_information">
-						<view class="information_bottom">
-							<h3 class="h3">Doreen</h3>
-							<view class="math_box">
-								<view style="display: flex;">
-									<view class="faxingSize">
-										发行量
-									</view>
-									<view class="math">
-										5500
-									</view>
-								</view>
-								<view class="priceBox">
-									<image src="../../static/image/usdt.png" class="usdtIcon"></image>
-									<view class="price">
-										{{item.usdt}}
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-
-			</el-tab-pane>
-			<el-tab-pane label="15天" name="second">
-				<view v-for="(item, index) in paimai" class="stake_area">
-					<image class="stake_area_img" :src="item.aaa"></image>
-					<view class="stake_information">
-						<view class="information_bottom">
-							<h3 class="h3">Doreen</h3>
-							<view class="math_box">
-								<view style="display: flex;">
-									<view class="faxingSize">
-										发行量
-									</view>
-									<view class="math">
-										5500
-									</view>
-								</view>
-								<view class="priceBox">
-									<image src="../../static/image/usdt.png" class="usdtIcon"></image>
-									<view class="price">
-										19500
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</el-tab-pane>
-			<el-tab-pane label="30天" name="third">
-				<view v-for="(item, index) in tuoguan" class="stake_area">
-					<image class="stake_area_img" :src="item.aaa"></image>
-					<view class="stake_information">
-						<view class="information_bottom">
-							<h3 class="h3">Doreen</h3>
-							<view class="math_box">
-								<view style="display: flex;">
-									<view class="faxingSize">
-										发行量
-									</view>
-									<view class="math">
-										5500
-									</view>
-								</view>
-								<view class="priceBox">
-									<image src="../../static/image/usdt.png" class="usdtIcon"></image>
-									<view class="price">
-										19500
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</el-tab-pane>
-			<el-tab-pane label="45天" name="fourth">
-				<view v-for="(item, index) in nft" class="stake_area">
-					<image class="stake_area_img" :src="item.aaa"></image>
-					<view class="stake_information">
-						<view class="information_bottom">
-							<h3 class="h3">Doreen</h3>
-							<view class="math_box">
-								<view style="display: flex;">
-									<view class="faxingSize">
-										发行量
-									</view>
-									<view class="math">
-										5500
-									</view>
-								</view>
-								<view class="priceBox">
-									<image src="../../static/image/usdt.png" class="usdtIcon"></image>
-									<view class="price">
-										19500
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</el-tab-pane>
-			<el-tab-pane label="60天" name="day">
-				<view v-for="(item, index) in day" class="stake_area">
-					<image class="stake_area_img" :src="item.aaa"></image>
-					<view class="stake_information">
-						<view class="information_bottom">
-							<h3 class="h3">Doreen</h3>
-							<view class="math_box">
-								<view style="display: flex;">
-									<view class="faxingSize">
-										发行量
-									</view>
-									<view class="math">
-										5500
-									</view>
-								</view>
-								<view class="priceBox">
-									<image src="../../static/image/usdt.png" class="usdtIcon"></image>
-									<view class="price">
-										19500
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</el-tab-pane>
-		</el-tabs>
+			</el-tabs>
+		</z-paging>
 	</view>
 
 </template>
@@ -368,17 +267,24 @@
 						aaa: "../../static/image/stake14.png"
 					},
 				],
-				activeName: 'first',
+				activeName: 1,
 				indicatorDots: true,
 				autoplay: true,
 				interval: 2000,
 				duration: 500,
-				showLeft: false
+				showLeft: false,
+				product: [],
+				stake_id: 1,
+				announcement: ''
 			}
 		},
 		onLoad() {
-
+			this.getNewListByType()
+			this.getNewListByTypeGG()
+			this.getStakeProduct()
+			this.getNftByStakeId()
 		},
+
 		created() {
 			uni.$on('reWalletList', () => {
 				this.currencyList = app.currencyList
@@ -427,12 +333,88 @@
 			});
 			this.lg = app.getLg2()
 		},
+
 		methods: {
-			toRecharge(){
+			//下拉刷新被触发
+			onRefresh() {
+				//以告知z-paging下拉刷新结束，这样才可以开始下一次的下拉刷新
+				setTimeout(() => {
+					//1.5秒之后停止刷新动画
+					this.$refs.paging.complete();
+				}, 1500)
+			},
+			// 轮播图 
+			getNewListByType() {
+				app.$get('news/getNewListByType', {
+					page: 1,
+					size: 10,
+					type: 2
+				}).then(res => {
+					console.log(res, '资讯')
+					this.carousel = res.data.result.data
+				})
+			},
+			// 公告
+			getNewListByTypeGG() {
+				app.$get('news/getNewListByType', {
+					page: 1,
+					size: 10,
+					type: 1
+				}).then(res => {
+					console.log(res, '公告')
+					this.announcement = res.data.result.data[0].zh_cn_content
+					console.log()
+				})
+			},
+			toRecharge() {
 				uni.navigateTo({
 					url: './recharge'
 				});
 			},
+			// 获取产品id
+			toIndex(item) {
+				this.stake_id = item.id
+				console.log(this.stake_id, 'id号000000000000000')
+				this.getNftByStakeId()
+			},
+			toDetails(item) {
+				uni.navigateTo({
+					url: './detailsList'
+				});
+			},
+			// 质押产品列表
+			getStakeProduct() {
+				try {
+					app.$get('stake/getStakeProduct').then(res => {
+						if (res.data.status == 1) {
+							console.log(res.data.result.data, '质押产品列表')
+							this.product = res.data.result.data
+						}
+					})
+				} catch (e) {
+					//TODO handle the exception
+				}
+
+			},
+			// 根据质押产品获取nft列表
+			getNftByStakeId() {
+				try {
+					app.$get('nft/getNftByStakeId', {
+						stake_id: 1,
+						page: 1,
+						size: 10
+					}).then(res => {
+						if (res.data.status == 1) {
+							console.log(res.data.result.data, '根据质押产品获取nft列表')
+							this.stake = res.data.result.data
+						}
+					})
+				} catch (e) {
+					//TODO handle the exception
+				}
+
+			},
+
 			getVarsion() {
 				this.progressError = ''
 				let that = this
@@ -678,7 +660,8 @@
 		align-items: center;
 		background-color: #3972ab;
 	}
-	.drawer_medal{
+
+	.drawer_medal {
 		width: 160rpx;
 		height: 160rpx;
 		margin-right: 10rpx;

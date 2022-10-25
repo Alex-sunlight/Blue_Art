@@ -15,6 +15,7 @@ import nvueModule from './modules/nvue'
 import emptyModule from './modules/empty'
 import refresherModule from './modules/refresher'
 import loadMoreModule from './modules/load-more'
+import loadingModule from './modules/loading'
 import scrollerModule from './modules/scroller'
 import backToTopModule from './modules/back-to-top'
 import virtualListModule from './modules/virtual-list'
@@ -41,6 +42,7 @@ export default {
 		emptyModule,
 		refresherModule,
 		loadMoreModule,
+		loadingModule,
 		scrollerModule,
 		backToTopModule,
 		virtualListModule
@@ -59,16 +61,13 @@ export default {
 			chatRecordLoadingMoreText: '',
 			wxsPropType: '',
 			renderPropScrollTop: -1,
-			renderPropUsePageScroll: -1,
 			checkScrolledToBottomTimeOut: null,
 			systemInfo: null,
 			cssSafeAreaInsetBottom: -1,
-			cacheTopHeight: 0,
+			cacheTopHeight: -1,
 
 			//--------------状态&判断---------------
 			insideOfPaging: -1,
-			loading: false,
-			loadingForNow: false,
 			isLoadFailed: false,
 			isIos: systemInfo.platform === 'ios',
 			disabledBounce: false,
@@ -135,9 +134,7 @@ export default {
 		//loading(下拉刷新、上拉加载更多)的主题样式，支持black，white，默认black
 		defaultThemeStyle: {
 			type: String,
-			default: function() {
-				return u.gc('defaultThemeStyle', 'black');
-			}
+			default: u.gc('defaultThemeStyle', 'black')
 		},
 		//z-paging是否使用fixed布局，若使用fixed布局，则z-paging的父view无需固定高度，z-paging高度默认为100%，默认为是(当使用内置scroll-view滚动时有效)
 		fixed: {
@@ -153,16 +150,6 @@ export default {
 		useSafeAreaPlaceholder: {
 			type: Boolean,
 			default: u.gc('useSafeAreaPlaceholder', false)
-		},
-		//第一次加载后自动隐藏loading slot，默认为是
-		autoHideLoadingAfterFirstLoaded: {
-			type: Boolean,
-			default: u.gc('autoHideLoadingAfterFirstLoaded', true)
-		},
-		//loading slot是否铺满屏幕并固定，默认为否
-		loadingFullFixed: {
-			type: Boolean,
-			default: u.gc('loadingFullFixed', false)
 		},
 		//slot="top"的view的z-index，默认为99，仅使用页面滚动时有效
 		topZIndex: {
@@ -184,14 +171,14 @@ export default {
 			type: Boolean,
 			default: u.gc('autoFullHeight', true)
 		},
-		//是否将错误信息打印至控制台，默认为是
-		showConsoleError: {
+		//是否监听列表触摸方向改变，默认为否
+		watchTouchDirectionChange: {
 			type: Boolean,
-			default: u.gc('showConsoleError', true)
+			default: u.gc('watchTouchDirectionChange', false)
 		},
 	},
 	created(){
-		if (this.createdReload && !this.refresherOnly && (this.mountedAutoCallReload && this.auto)) {
+		if (this.createdReload && !this.refresherOnly && this.auto) {
 			this._startLoading();
 			this._preReload();
 		}
@@ -199,24 +186,24 @@ export default {
 	mounted() {
 		this.wxsPropType = u.getTime().toString();
 		this.renderJsIgnore;
-		if (!this.createdReload && !this.refresherOnly && (this.mountedAutoCallReload && this.auto)) {
+		if (!this.createdReload && !this.refresherOnly && this.auto) {
 			this.$nextTick(() => {
 				this._preReload();
 			})
 		}
+		this.finalUseCache && this._setListByLocalCache();
 		let delay = 0;
 		// #ifdef H5 || MP
 		delay = 100;
 		// #endif
 		this.$nextTick(() => {
 			this.systemInfo = uni.getSystemInfoSync();
-			if (!this.usePageScroll && this.autoHeight) {
-				this._setAutoHeight();
-			}
+			!this.usePageScroll && this.autoHeight && this._setAutoHeight();
 			this.loaded = true;
 		})
 		this.updatePageScrollTopHeight();
 		this.updatePageScrollBottomHeight();
+		this._updateLeftAndRightWidth();
 		if (this.finalRefresherEnabled && this.useCustomRefresher) {
 			this.$nextTick(() => {
 				this.isTouchmoving = true;
@@ -233,8 +220,8 @@ export default {
 		this.finalUseVirtualList && this._virtualListInit();
 		// #endif
 		// #ifndef APP-PLUS
-		this.$nextTick(()=>{
-			setTimeout(()=>{
+		this.$nextTick(() => {
+			setTimeout(() => {
 				this._getCssSafeAreaInsetBottom();
 			},delay)
 		})
@@ -249,26 +236,6 @@ export default {
 	},
 	// #endif
 	watch: {
-		loadingStatus(newVal, oldVal) {
-			this.$emit('loadingStatusChange', newVal);
-			this.$nextTick(()=>{
-				this.loadingStatusAfterRender = newVal;
-			})
-			// #ifdef APP-NVUE
-			if (this.useChatRecordMode) {
-				if (this.pageNo === this.defaultPageNo && newVal === Enum.More.NoMore) {
-					this.nIsFirstPageAndNoMore = true;
-					return;
-				}
-			}
-			this.nIsFirstPageAndNoMore = false;
-			//  #endif
-		},
-		loading(newVal){
-			if(newVal){
-				this.loadingForNow = newVal;
-			}
-		},
 		defaultThemeStyle: {
 			handler(newVal) {
 				if (newVal.length) {
@@ -277,38 +244,25 @@ export default {
 			},
 			immediate: true
 		},
-		autoHeight(newVal, oldVal) {
-			if (this.loaded && !this.usePageScroll) {
-				this._setAutoHeight(newVal);
-			}
+		autoHeight(newVal) {
+			this.loaded && !this.usePageScroll && this._setAutoHeight(newVal);
 		},
-		autoHeightAddition(newVal, oldVal) {
-			if (this.loaded && !this.usePageScroll && this.autoHeight) {
-				this._setAutoHeight(newVal);
-			}
+		autoHeightAddition(newVal) {
+			this.loaded && !this.usePageScroll && this.autoHeight && this._setAutoHeight(newVal);
 		},
 	},
 	computed: {
-		zScopedSlots() {
-			return this.$scopedSlots;
-		},
 		finalPagingStyle() {
-			let pagingStyle = this.pagingStyle;
+			const pagingStyle = this.pagingStyle;
 			if (!this.systemInfo) return pagingStyle;
-			const windowTop = this.systemInfo.windowTop;
-			const windowBottom = this.systemInfo.windowBottom;
+			const windowTop = this.windowTop;
+			const windowBottom = this.windowBottom;
 			if (!this.usePageScroll && this.fixed) {
 				if (windowTop && !pagingStyle.top) {
 					pagingStyle.top = windowTop + 'px';
 				}
-				if (!pagingStyle.bottom) {
-					let bottom = windowBottom || 0;
-					if (this.safeAreaInsetBottom && !this.useSafeAreaPlaceholder) {
-						bottom += this.safeAreaBottom;
-					}
-					if(bottom > 0){
-						pagingStyle.bottom = bottom + 'px';
-					}
+				if (windowBottom && !pagingStyle.bottom) {
+					pagingStyle.bottom = windowBottom + 'px';
 				}
 			}
 			if (this.bgColor.length && !pagingStyle['background']) {
@@ -331,14 +285,6 @@ export default {
 				this.pagingContentStyle['position'] = 'relative';
 			}
 			return this.pagingContentStyle;
-		},
-		showLoading() {
-			if (this.firstPageLoaded || !this.loading || !this.loadingForNow) return false;
-			if (this.autoHideLoadingAfterFirstLoaded) {
-				return this.fromEmptyViewReload ? true : !this.pagingLoaded;
-			} else{
-				return this.loadingType === Enum.LoadingType.Refresher;
-			}
 		},
 		safeAreaBottom() {
 			if (!this.systemInfo) return 0;
@@ -363,6 +309,12 @@ export default {
 			return !this.systemInfo ? 0 : this.systemInfo.windowHeight || 0;
 		},
 		windowTop() {
+			//暂时修复vue3中隐藏系统导航栏后windowTop获取不正确的问题，具体bug详见https://ask.dcloud.net.cn/question/141634
+			//感谢litangyu！！https://github.com/SmileZXLee/uni-z-paging/issues/25
+			// #ifdef VUE3 && H5
+			const pageHeadNode = document.getElementsByTagName("uni-page-head");
+			if (!pageHeadNode.length) return 0;
+			// #endif
 			return !this.systemInfo ? 0 : this.systemInfo.windowTop || 0;
 		},
 		windowBottom() {
@@ -373,6 +325,27 @@ export default {
 			}
 			return windowBottom;
 		},
+		isOldWebView() {
+			// #ifndef APP-NVUE || MP-KUAISHOU
+			try {
+				const systemInfos = systemInfo.system.split(' ');
+				const deviceType = systemInfos[0];
+				const version = parseInt(systemInfos[1].slice(0,1));
+				if ((deviceType === 'iOS' && version <= 10) || (deviceType === 'Android' && version <= 6)) {
+					return true;
+				}
+			} catch(e){
+				return false;
+			}
+			// #endif
+			return false;
+		},
+		isIosAndH5(){
+			// #ifndef H5
+			return false;
+			// #endif
+			return this.isIos;
+		}
 	},
 	methods: {
 		//当前版本号
@@ -385,7 +358,7 @@ export default {
 		},
 		//与setSpecialEffects等效，兼容旧版本
 		setListSpecialEffects(args) {
-			this.nFixFreezing = args !== {};
+			this.nFixFreezing = args && Object.keys(args).length;
 			if (this.isIos) {
 				this.privateRefresherEnabled = 0;
 			}
@@ -393,28 +366,21 @@ export default {
 				this.$refs['zp-n-list'].setSpecialEffects(args);
 			}
 		},
-		//处理开始加载更多状态
-		_startLoading(isReload = false) {
-			if ((this.showLoadingMoreWhenReload && !this.isUserPullDown) || !isReload) {
-				this.loadingStatus = Enum.More.Loading;
-			}
-			this.loading = true;
-		},
 		//检测scrollView是否要铺满屏幕
 		_doCheckScrollViewShouldFullHeight(totalData){
 			if (this.autoFullHeight && this.usePageScroll && this.isTotalChangeFromAddData) {
 				// #ifndef APP-NVUE
 				this.$nextTick(() => {
 					this._checkScrollViewShouldFullHeight((scrollViewNode, pagingContainerNode) => {
-						this._preCheckShowLoadingMoreWhenNoMoreAndInsideOfPaging(totalData, scrollViewNode, pagingContainerNode)
+						this._preCheckShowNoMoreInside(totalData, scrollViewNode, pagingContainerNode)
 					});
 				})
 				// #endif
 				// #ifdef APP-NVUE
-				this._preCheckShowLoadingMoreWhenNoMoreAndInsideOfPaging(totalData)
+				this._preCheckShowNoMoreInside(totalData)
 				// #endif
 			} else {
-				this._preCheckShowLoadingMoreWhenNoMoreAndInsideOfPaging(totalData)
+				this._preCheckShowNoMoreInside(totalData)
 			} 
 		},
 		//检测z-paging是否要全屏覆盖(当使用页面滚动并且不满全屏时，默认z-paging需要铺满全屏，避免数据过少时内部的empty-view无法正确展示)
@@ -438,15 +404,13 @@ export default {
 		},
 		//设置z-paging高度
 		async _setAutoHeight(shouldFullHeight = true, scrollViewNode = null) {
-			let heightKey = 'height';
+			let heightKey = 'min-height';
 			// #ifndef APP-NVUE
-			if (this.usePageScroll) {
-				heightKey = 'min-height';
-			}
+			heightKey = 'min-height';
 			// #endif
 			try {
 				if (shouldFullHeight) {
-					let finalScrollViewNode = scrollViewNode ? scrollViewNode : await this._getNodeClientRect('.scroll-view');
+					let finalScrollViewNode = scrollViewNode ? scrollViewNode : await this._getNodeClientRect('.zp-scroll-view');
 					let finalScrollBottomNode = await this._getNodeClientRect('.zp-page-bottom');
 					if (finalScrollViewNode) {
 						const scrollViewTop = finalScrollViewNode[0].top;
@@ -454,9 +418,10 @@ export default {
 						if(finalScrollBottomNode){
 							scrollViewHeight -= finalScrollBottomNode[0].height;
 						}
-						let additionHeight = u.convertTextToPx(this.autoHeightAddition);
-						this.$set(this.scrollViewStyle, heightKey, scrollViewHeight + additionHeight - (this.insideMore ? 1 : 0) + 'px');
-						this.$set(this.scrollViewInStyle, heightKey, scrollViewHeight + additionHeight - (this.insideMore ? 1 : 0) + 'px');
+						const additionHeight = u.convertTextToPx(this.autoHeightAddition);
+						const finalHeight = scrollViewHeight + additionHeight - (this.insideMore ? 1 : 0) + 'px !important';
+						this.$set(this.scrollViewStyle, heightKey, finalHeight);
+						this.$set(this.scrollViewInStyle, heightKey, finalHeight);
 					}
 				} else {
 					this.$delete(this.scrollViewStyle, heightKey);
@@ -528,9 +493,6 @@ export default {
 		},
 		//添加全局emit监听
 		_onEmit() {
-			uni.$on(c.i18nUpdateKey, () => {
-				this.tempLanguageUpdateKey = u.getTime();
-			})
 			uni.$on(c.errorUpdateKey, () => {
 				if (this.loading) {
 					this.complete(false);
@@ -569,7 +531,6 @@ export default {
 		},
 		//销毁全局emit和listener监听
 		_offEmit(){
-			uni.$off(c.i18nUpdateKey);
 			uni.$off(c.errorUpdateKey);
 			uni.$off(c.completeUpdateKey);
 		}

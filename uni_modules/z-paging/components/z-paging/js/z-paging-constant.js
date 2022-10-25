@@ -1,21 +1,12 @@
 // [z-paging]常量
 
-const version = '2.2.7';
-const delayTime = 100;
-const i18nUpdateKey = 'z-paging-i18n-update';
-
-const errorUpdateKey = 'z-paging-error-emit';
-const completeUpdateKey = 'z-paging-complete-emit';
-
-const listCellIndexKey = 'zp_index';
-const listCellIndexUniqueKey = 'zp_unique_index';
-
 export default {
-	version,
-	delayTime,
-	i18nUpdateKey,
-	errorUpdateKey,
-	completeUpdateKey,
-	listCellIndexKey,
-	listCellIndexUniqueKey
+	version: '2.4.6',
+	delayTime: 100,
+	errorUpdateKey: 'z-paging-error-emit',
+	completeUpdateKey: 'z-paging-complete-emit',
+	cachePrefixKey: 'z-paging-cache',
+	
+	listCellIndexKey: 'zp_index',
+	listCellIndexUniqueKey: 'zp_unique_index'
 }

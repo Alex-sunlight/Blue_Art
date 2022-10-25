@@ -1,6 +1,6 @@
 // [z-paging]枚举
 
-const Enum = {
+export default {
 	//当前加载类型 0.下拉刷新 1.上拉加载更多
 	LoadingType: {
 		Refresher: 0,
@@ -29,9 +29,16 @@ const Enum = {
 	},
 	//虚拟列表cell高度模式
 	CellHeightMode: {
+		//固定高度
 		Fixed: 'fixed',
+		//动态高度
 		Dynamic: 'dynamic'
+	},
+	//列表缓存模式
+	CacheMode: {
+		//默认模式，只会缓存一次
+		Default: 'default',
+		//总是缓存，每次列表刷新(下拉刷新、调用reload等)都会更新缓存
+		Always: 'always'
 	}
 }
-
-export default Enum;

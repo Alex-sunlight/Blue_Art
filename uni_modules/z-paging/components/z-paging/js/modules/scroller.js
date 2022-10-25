@@ -5,7 +5,7 @@ import Enum from '.././z-paging-enum'
 // #ifdef APP-NVUE
 const weexDom = weex.requireModule('dom');
 // #endif
-const ZPScroller = {
+export default {
 	props: {
 		//使用页面滚动，默认为否，当设置为是时则使用页面的滚动而非此组件内部的scroll-view的滚动，使用页面滚动时z-paging无需设置确定的高度且对于长列表展示性能更高，但配置会略微繁琐
 		usePageScroll: {
@@ -53,28 +53,24 @@ const ZPScroller = {
 			scrollTop: 0,
 			oldScrollTop: 0,
 			scrollViewStyle: {},
+			scrollViewContainerStyle: {},
 			scrollViewInStyle: {},
 			pageScrollTop: -1,
 			scrollEnable: true,
 			privateScrollWithAnimation: -1,
-			cacheScrollNodeHeight: -1,
+			cacheScrollNodeHeight: -1
 		}
 	},
 	watch: {
-		oldScrollTop(newVal, oldVal) {
-			!this.usePageScroll && this._scrollTopChange(newVal,oldVal,false);
+		oldScrollTop(newVal) {
+			!this.usePageScroll && this._scrollTopChange(newVal,false);
 		},
-		pageScrollTop(newVal, oldVal) {
-			this.usePageScroll && this._scrollTopChange(newVal,oldVal,true);
+		pageScrollTop(newVal) {
+			this.usePageScroll && this._scrollTopChange(newVal,true);
 		},
 		usePageScroll: {
 			handler(newVal) {
-				this.$nextTick(() => {
-					this.renderPropUsePageScroll = newVal;
-				})
-				if (this.loaded && this.autoHeight) {
-					this._setAutoHeight(!newVal);
-				}
+				this.loaded && this.autoHeight && this._setAutoHeight(!newVal)
 				// #ifdef H5
 				if (newVal) {
 					this.$nextTick(()=>{
@@ -88,7 +84,7 @@ const ZPScroller = {
 			},
 			immediate: true
 		},
-		finalScrollTop(newVal, oldVal) {
+		finalScrollTop(newVal) {
 			if (!this.useChatRecordMode) {
 				this.renderPropScrollTop = newVal < 6 ? 0 : 10;
 			}
@@ -113,10 +109,13 @@ const ZPScroller = {
 		finalScrollTop() {
 			return this.usePageScroll ? this.pageScrollTop : this.oldScrollTop;
 		},
+		finalIsOldWebView() {
+			return this.isOldWebView && !this.usePageScroll;
+		}
 	},
 	methods: {
 		//滚动到顶部，animate为是否展示滚动动画，默认为是
-		scrollToTop(animate,checkReverse = true) {
+		scrollToTop(animate, checkReverse = true) {
 			// #ifdef APP-NVUE
 			if (checkReverse && this.useChatRecordMode) {
 				if(!this.nIsFirstPageAndNoMore){
@@ -137,7 +136,7 @@ const ZPScroller = {
 			})
 		},
 		//滚动到底部，animate为是否展示滚动动画，默认为是
-		scrollToBottom(animate,checkReverse = true) {
+		scrollToBottom(animate, checkReverse = true) {
 			// #ifdef APP-NVUE
 			if (checkReverse && this.useChatRecordMode) {
 				if(!this.nIsFirstPageAndNoMore){
@@ -185,10 +184,6 @@ const ZPScroller = {
 		},
 		//当使用页面滚动并且自定义下拉刷新时，请在页面的onPageScroll中调用此方法，告知z-paging当前的pageScrollTop，否则会导致在任意位置都可以下拉刷新
 		updatePageScrollTop(value) {
-			if (value == undefined) {
-				u.consoleErr('updatePageScrollTop方法缺少参数，请将页面onPageScroll事件中的scrollTop传递给此方法');
-				return;
-			}
 			this.pageScrollTop = value;
 		},
 		//当使用页面滚动并且设置了slot="top"时，默认初次加载会自动获取其高度，并使内部容器下移，当slot="top"的view高度动态改变时，在其高度需要更新时调用此方法
@@ -198,6 +193,12 @@ const ZPScroller = {
 		//当使用页面滚动并且设置了slot="bottom"时，默认初次加载会自动获取其高度，并使内部容器下移，当slot="bottom"的view高度动态改变时，在其高度需要更新时调用此方法
 		updatePageScrollBottomHeight() {
 			this._updatePageScrollTopOrBottomHeight('bottom');
+		},
+		//更新slot="left"和slot="right"宽度，当slot="left"或slot="right"宽度动态改变时调用
+		updateLeftAndRightWidth() {
+			this.$nextTick(() => {
+				this._updateLeftAndRightWidth();
+			})
 		},
 		//更新z-paging内置scroll-view的scrollTop
 		updateScrollViewScrollTop(scrollTop, animate = true) {
@@ -226,28 +227,22 @@ const ZPScroller = {
 			const el = this.$refs['zp-n-list-top-tag'];
 			if (this.usePageScroll) {
 				this._getNodeClientRect('zp-page-scroll-top', false).then((node) => {
-					let nodeHeight = 0;
-					if (node) {
-						nodeHeight = node[0].height;
-					}
+					const nodeHeight = node ? node[0].height : 0;
 					weexDom.scrollToElement(el, {
 						offset: -nodeHeight,
 						animated: animate
 					});
 				});
 			} else {
-				if(!this.isIos && this.nvueListIs === 'scroller'){
+				if (!this.isIos && this.nvueListIs === 'scroller') {
 					this._getNodeClientRect('zp-n-refresh-container', false).then((node) => {
-						let nodeHeight = 0;
-						if (node) {
-							nodeHeight = node[0].height;
-						}
+						const nodeHeight = node ? node[0].height : 0;
 						weexDom.scrollToElement(el, {
 							offset: -nodeHeight,
 							animated: animate
 						});
 					});
-				}else{
+				} else {
 					weexDom.scrollToElement(el, {
 						offset: 0,
 						animated: animate
@@ -297,20 +292,14 @@ const ZPScroller = {
 			}
 			try {
 				this.privateScrollWithAnimation = animate ? 1 : 0;
-				let pagingContainerH = 0;
-				let scrollViewH = 0;
 				const pagingContainerNode = await this._getNodeClientRect('.zp-paging-container');
 				const scrollViewNode = await this._getNodeClientRect('.zp-scroll-view');
-				if (pagingContainerNode) {
-					pagingContainerH = pagingContainerNode[0].height;
-				}
-				if (scrollViewNode) {
-					scrollViewH = scrollViewNode[0].height;
-				}
+				const pagingContainerH = pagingContainerNode ? pagingContainerNode[0].height : 0;
+				const scrollViewH = scrollViewNode ? scrollViewNode[0].height : 0;
 				if (pagingContainerH > scrollViewH) {
 					this.scrollTop = this.oldScrollTop;
 					this.$nextTick(() => {
-						this.scrollTop = pagingContainerH - scrollViewH;
+						this.scrollTop = pagingContainerH - scrollViewH + this.virtualPlaceholderTopHeight;
 						this.oldScrollTop = this.scrollTop;
 					});
 				}
@@ -361,7 +350,7 @@ const ZPScroller = {
 		},
 		//通过nodeTop滚动到指定view
 		_scrollIntoViewByNodeTop(nodeTop, offset = 0, animate = false) {
-			this._scrollToY(nodeTop,offset,animate,true);
+			this._scrollToY(nodeTop, offset, animate, true);
 		},
 		//滚动到指定位置
 		_scrollToY(y, offset = 0, animate = false, addScrollTop = false) {
@@ -384,17 +373,17 @@ const ZPScroller = {
 			this.$emit('scroll', e);
 			const scrollTop = e.detail.scrollTop;
 			// #ifndef APP-NVUE
-			this.finalUseVirtualList && this._updateVirtualScroll(scrollTop,this.oldScrollTop - scrollTop);
+			this.finalUseVirtualList && this._updateVirtualScroll(scrollTop, this.oldScrollTop - scrollTop);
 			// #endif
 			this.oldScrollTop = scrollTop;
 			const scrollDiff = e.detail.scrollHeight - this.oldScrollTop;
 			!this.isIos && this._checkScrolledToBottom(scrollDiff);
 		},
 		//scrollTop改变时触发
-		_scrollTopChange(newVal,oldVal,isPageScrollTop){
+		_scrollTopChange(newVal, isPageScrollTop){
 			this.$emit('scrollTopChange', newVal);
 			this.$emit('update:scrollTop', newVal);
-			this._checkShouldShowBackToTop(newVal, oldVal);
+			this._checkShouldShowBackToTop(newVal);
 			const scrollTop = this.isIos ? (newVal > 5 ? 6 : 0) : newVal;
 			if (isPageScrollTop) {
 				this.wxsPageScrollTop = scrollTop;
@@ -411,15 +400,10 @@ const ZPScroller = {
 			const node = `.zp-page-${type}`;
 			const marginText = `margin${type.slice(0,1).toUpperCase() + type.slice(1)}`;
 			let safeAreaInsetBottomAdd = this.safeAreaInsetBottom;
-			// #ifdef APP-NVUE
-			if (!this.usePageScroll) {
-				safeAreaInsetBottomAdd = false;
-			}
-			// #endif
 			this.$nextTick(() => {
 				let delayTime = 0;
-				// #ifdef MP-BAIDU
-				delayTime = 10;
+				// #ifdef MP-BAIDU || APP-NVUE
+				delayTime = 50;
 				// #endif
 				setTimeout(() => {
 					this._getNodeClientRect(node).then((res) => {
@@ -432,8 +416,7 @@ const ZPScroller = {
 							} else {
 								this.cacheTopHeight = pageScrollNodeHeight;
 							}
-							this.$set(this.scrollViewStyle, marginText,
-								`${pageScrollNodeHeight}px`);
+							this.$set(this.scrollViewStyle, marginText, `${pageScrollNodeHeight}px`);
 						} else if (safeAreaInsetBottomAdd) {
 							this.$set(this.scrollViewStyle, marginText, `${this.safeAreaBottom}px`);
 						}
@@ -441,7 +424,22 @@ const ZPScroller = {
 				}, delayTime)
 			})
 		},
+		//获取slot="left"和slot="right"宽度并且更新布局
+		_updateLeftAndRightWidth(){
+			if (!this.finalIsOldWebView) return;
+			this.$nextTick(() => {
+				let delayTime = 0;
+				// #ifdef MP-BAIDU
+				delayTime = 10;
+				// #endif
+				setTimeout(() => {
+					['left','right'].map(position => {
+						this._getNodeClientRect(`.zp-page-${position}`).then((res) => {
+							this.$set(this.scrollViewContainerStyle, position, res ? res[0].width + 'px' : '0px');
+						});
+					})
+				}, delayTime)
+			})
+		}
 	}
 }
-
-export default ZPScroller;

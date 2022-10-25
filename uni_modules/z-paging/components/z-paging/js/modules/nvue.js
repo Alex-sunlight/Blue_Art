@@ -1,12 +1,14 @@
 // [z-paging]nvue独有部分模块
 import u from '.././z-paging-utils'
+import c from '.././z-paging-constant'
 import Enum from '.././z-paging-enum'
 
 // #ifdef APP-NVUE
 const weexAnimation = weex.requireModule('animation');
 // #endif
-const ZPNvue = {
+export default {
 	props: {
+		// #ifdef APP-NVUE
 		//nvue中修改列表类型，可选值有list、waterfall和scroller，默认为list
 		nvueListIs: {
 			type: String,
@@ -41,11 +43,22 @@ const ZPNvue = {
 				return u.gc('nvueRefresherStyle', {});
 			}
 		},
+		//nvue中是否按分页模式(类似竖向swiper)显示List，默认为false
+		nvuePagingEnabled: {
+			type: Boolean,
+			default: u.gc('nvuePagingEnabled', false)
+		},
 		//是否隐藏nvue列表底部的tagView，此view用于标识滚动到底部位置，若隐藏则滚动到底部功能将失效，在nvue中实现吸顶+swiper功能时需将最外层z-paging的此属性设置为true。默认为否
 		hideNvueBottomTag: {
 			type: Boolean,
 			default: u.gc('hideNvueBottomTag', false)
 		},
+		//nvue中控制onscroll事件触发的频率：表示两次onscroll事件之间列表至少滚动了10px。注意，将该值设置为较小的数值会提高滚动事件采样的精度，但同时也会降低页面的性能
+		offsetAccuracy: {
+			type: Number,
+			default: u.gc('offsetAccuracy', 10)
+		},
+		// #endif
 	},
 	data() {
 		return {
@@ -58,20 +71,28 @@ const ZPNvue = {
 			nFirstPageAndNoMoreChecked: false,
 			nLoadingMoreFixedHeight: false,
 			nShowRefresherRevealHeight: 0,
+			nOldShowRefresherRevealHeight: -1,
 			nRefresherWidth: uni.upx2px(750),
 		}
 	},
 	watch: {
 		nIsFirstPageAndNoMore: {
 			handler(newVal) {
-				const cellStyle = !this.useChatRecordMode || newVal ? {} : {transform: 'rotate(180deg)'};
-				this.$emit('update:cellStyle', cellStyle);
+				this.$emit('update:cellStyle', !this.useChatRecordMode || newVal ? {} : {transform: 'rotate(180deg)'});
 			},
 			immediate: true
 		}
 	},
 	computed: {
 		// #ifdef APP-NVUE
+		nScopedSlots() {
+			// #ifdef VUE2
+			return this.$scopedSlots;
+			// #endif
+			// #ifdef VUE3
+			return null;
+			// #endif
+		},
 		nWaterfallColumnCount() {
 			if (this.finalNvueListIs !== 'waterfall') return 0;
 			return this._nGetWaterfallConfig('column-count', 2);
@@ -98,9 +119,7 @@ const ZPNvue = {
 		finalNvueListIs() {
 			if (this.usePageScroll) return 'view';
 			const nvueListIsLowerCase = this.nvueListIs.toLowerCase();
-			if (['list','waterfall','scroller'].indexOf(nvueListIsLowerCase) !== -1) {
-				return nvueListIsLowerCase;
-			}
+			if (['list','waterfall','scroller'].indexOf(nvueListIsLowerCase) !== -1) return nvueListIsLowerCase;
 			return 'list';
 		},
 		finalNvueSuperListIs() {
@@ -116,9 +135,14 @@ const ZPNvue = {
 		//列表滚动时触发
 		_nOnScroll(e) {
 			this.$emit('scroll', e);
-			const contentOffsetY = e.contentOffset.y;
+			const contentOffsetY = -e.contentOffset.y;
+			this.oldScrollTop = contentOffsetY;
 			this.nListIsDragging = e.isDragging;
-			this._checkShouldShowBackToTop(-e.contentOffset.y, -e.contentOffset.y - 1);
+			this._checkShouldShowBackToTop(contentOffsetY, contentOffsetY - 1);
+		},
+		//列表开始触摸
+		_nTouchstart() {
+			this._handleListTouchstart();
 		},
 		//下拉刷新刷新中
 		_nOnRrefresh() {
@@ -136,7 +160,7 @@ const ZPNvue = {
 			this.refresherStatus = pullingDis >= viewHeight ? Enum.Refresher.ReleaseToRefresh : Enum.Refresher.Default;
 		},
 		//下拉刷新结束
-		_nRefresherEnd(doEnd=true) {
+		_nRefresherEnd(doEnd = true) {
 			if (doEnd) {
 			   this._nDoRefresherEndAnimation(0, -this.nShowRefresherRevealHeight); 
 			   !this.usePageScroll && this.$refs['zp-n-list'].resetLoadmore();
@@ -152,6 +176,7 @@ const ZPNvue = {
 		_nDoRefresherEndAnimation(height, translateY, animate = true, checkStack = true) {
 			this._cleanRefresherCompleteTimeout();
 			this._cleanRefresherEndTimeout();
+			
 			if (!this.finalShowRefresherWhenReload) {
 				this.refresherEndTimeout = setTimeout(() => {
 					this.refresherStatus = Enum.Refresher.Default;
@@ -169,22 +194,29 @@ const ZPNvue = {
 			if (stackCount > 1) {
 				this.refresherStatus = Enum.Refresher.Loading;
 			}
-			const duration = animate ? 120 : 0;
-			weexAnimation.transition(this.$refs['zp-n-list-refresher-reveal'], {
-				styles: {
-					height: `${height}px`,
-					transform: `translateY(${translateY}px)`,
-				},
-				duration: duration,
-				timingFunction: 'linear',
-				needLayout: true,
-				delay: 0
-			})
+			
+			const duration = animate ? 180 : 0;
+			if (this.nOldShowRefresherRevealHeight !== height) {
+				if(height > 0){
+					this.nShowRefresherReveal = true;
+				}
+				weexAnimation.transition(this.$refs['zp-n-list-refresher-reveal'], {
+					styles: {
+						height: `${height}px`,
+						transform: `translateY(${translateY}px)`,
+					},
+					duration: duration,
+					timingFunction: 'linear',
+					needLayout: true,
+					delay: 0
+				})
+			}
 			setTimeout(() => {
 				if (animate) {
 					this.nShowRefresherReveal = height > 0;
 				}
 			}, duration > 0 ? duration - 100 : 0);
+			this.nOldShowRefresherRevealHeight = height;
 		},
 		//滚动到底部加载更多
 		_nOnLoadmore() {
@@ -197,18 +229,19 @@ const ZPNvue = {
 		},
 		//更新nvue 下拉刷新view容器的宽度
 		_nUpdateRefresherWidth() {
-			this.$nextTick(()=>{
-				this._getNodeClientRect('.zp-n-list').then(node => {
-					if (node) {
-						const nodeWidth = node[0].width;
-						this.nRefresherWidth = nodeWidth;
-					}
+			setTimeout(() => {
+				this.$nextTick(()=>{
+					this._getNodeClientRect('.zp-n-list').then(node => {
+						if (node) {
+							const nodeWidth = node[0].width;
+							if (nodeWidth) {
+								this.nRefresherWidth = nodeWidth;
+							}
+						}
+					})
 				})
-			})
-			
+			},c.delayTime)	
 		}
 		// #endif
 	}
 }
-
-export default ZPNvue;

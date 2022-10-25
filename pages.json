@@ -3,11 +3,10 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "Blue_Art",
+				"navigationBarTitleText": "BlueArt",
 				"app-plus": {
 					"titleNView": {
-						"buttons": [
-							{
+						"buttons": [{
 								"index": "0",
 								"text": "\ue69d",
 								"fontSize": "23",
@@ -29,7 +28,9 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "首页"
+				"navigationBarTitleText": "首页",
+				"navigationBarTitleText": "uni-app",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -38,12 +39,7 @@
 				"navigationBarTitleText": "我的"
 			}
 		},
-		{
-			"path": "pages/my/material",
-			"style": {
-				"navigationBarTitleText": "资料设置"
-			}
-		},
+
 		{
 			"path": "pages/my/collect",
 			"style": {
@@ -103,6 +99,36 @@
 			"style": {
 				"navigationBarTitleText": "地址回执"
 			}
+		},
+		{
+			"path": "pages/settings/settings",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		},
+		{
+			"path": "pages/settings/ProfileSettings",
+			"style": {
+				"navigationBarTitleText": "资料设置"
+			}
+		},
+		{
+			"path": "pages/settings/SecuritySettings",
+			"style": {
+				"navigationBarTitleText": "安全设置"
+			}
+		},
+		{
+			"path": "pages/index/detailsList",
+			"style": {
+				"navigationBarTitleText": "详情列表"
+			}
+		},
+		{
+			"path": "pages/index/details",
+			"style": {
+				"navigationBarTitleText": "详情"
+			}
 		}
 	],
 	"tabBar": {
@@ -110,8 +136,7 @@
 		"selectedColor": "#57b6ff", // tab 上的文字选中时的颜色
 		"borderStyle": "black", // tabbar 上边框的颜色，可选值 black/white
 		"backgroundColor": "#3972ab", // tab 的背景色
-		"list": [
-			{ // 最少2个、最多5个 tab
+		"list": [{ // 最少2个、最多5个 tab
 				"pagePath": "pages/index/index", // 页面路径，必须在 pages 中先定义
 				"iconPath": "/static/image/index1.png", // 图片路径，icon 大小限制为40kb，建议尺寸为 81px * 81px
 				"selectedIconPath": "/static/image/index2.png", // 选中时的图片路径
@@ -126,7 +151,7 @@
 		]
 	},
 	"globalStyle": {
-		// "navigationBarTextStyle": "#fff",
+		"navigationBarTextStyle": "#fff",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#3972ab",
 		"backgroundColor": "#3972ab"

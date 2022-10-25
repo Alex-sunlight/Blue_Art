@@ -1,5 +1,5 @@
 <template>
-	<view class="pages-material">
+	<view class="pages-ProfileSettings">
 		<view class="drawer_assets">
 			<view class="imgBox">
 				<image class="drawer_image" src="../../static/image/stake8.png"></image>
@@ -22,7 +22,7 @@
 </script>
 
 <style lang="scss">
-	.pages-material {
+	.pages-ProfileSettings {
 		width: 100%;
 		min-height: 100vh;
 		padding-bottom: 100rpx;

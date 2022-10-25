@@ -2,7 +2,7 @@
 import u from '.././z-paging-utils'
 import Enum from '.././z-paging-enum'
 
-const ZPLoadMore = {
+export default {
 	props: {
 		//自定义底部加载更多样式
 		loadingMoreCustomStyle: {
@@ -76,14 +76,14 @@ const ZPLoadMore = {
 			default: u.gc('loadingMoreFailText', null)
 		},
 		//当没有更多数据且分页内容未超出z-paging时是否隐藏没有更多数据的view，默认为否
-		hideLoadingMoreWhenNoMoreAndInsideOfPaging: {
+		hideNoMoreInside: {
 			type: Boolean,
-			default: u.gc('hideLoadingMoreWhenNoMoreAndInsideOfPaging', false)
+			default: u.gc('hideNoMoreInside', false)
 		},
 		//当没有更多数据且分页数组长度少于这个值时，隐藏没有更多数据的view，默认为0，代表不限制。
-		hideLoadingMoreWhenNoMoreByLimit: {
+		hideNoMoreByLimit: {
 			type: Number,
-			default: u.gc('hideLoadingMoreWhenNoMoreByLimit', 0)
+			default: u.gc('hideNoMoreByLimit', 0)
 		},
 		//是否显示默认的加载更多text，默认为是
 		showDefaultLoadingMoreText: {
@@ -107,6 +107,11 @@ const ZPLoadMore = {
 				return u.gc('loadingMoreNoMoreLineCustomStyle', {});
 			},
 		},
+		//当分页未满一屏时，是否自动加载更多，默认为否(nvue无效)
+		insideMore: {
+			type: Boolean,
+			default: u.gc('insideMore', false)
+		},
 		//距底部/右边多远时（单位px），触发 scrolltolower 事件，默认为100rpx
 		lowerThreshold: {
 			type: [Number, String],
@@ -115,6 +120,7 @@ const ZPLoadMore = {
 	},
 	data() {
 		return {
+			M: Enum.More,
 			//底部加载更多状态
 			loadingStatus: Enum.More.Default,
 			loadingStatusAfterRender: Enum.More.Default,
@@ -125,7 +131,7 @@ const ZPLoadMore = {
 		}
 	},
 	computed: {
-		zPagingLoadMoreConfig() {
+		zLoadMoreConfig() {
 			return {
 				status: this.loadingStatusAfterRender,
 				defaultAsLoading: this.loadingMoreDefaultAsLoading,
@@ -142,7 +148,7 @@ const ZPLoadMore = {
 				loadingText: this.finalLoadingMoreLoadingText,
 				noMoreText: this.finalLoadingMoreNoMoreText,
 				failText: this.finalLoadingMoreFailText,
-				hideContent: !this.loadingMoreDefaultAsLoading && this.listRendering
+				hideContent: !this.loadingMoreDefaultAsLoading && this.listRendering,
 			};
 		},
 		finalLoadingMoreThemeStyle() {
@@ -165,9 +171,13 @@ const ZPLoadMore = {
 		}
 	},
 	methods: {
+		//页面滚动到底部时通知z-paging进行进一步处理
+		pageReachBottom() {
+			!this.useChatRecordMode && this._onLoadingMore('toBottom');
+		},
 		//手动触发上拉加载更多(非必须，可依据具体需求使用)
-		doLoadMore() {
-			this._onLoadingMore('toBottom');
+		doLoadMore(type) {
+			this._onLoadingMore(type);
 		},
 		//通过@scroll事件检测是否滚动到了底部
 		_checkScrolledToBottom(scrollDiff, checked = false) {
@@ -201,23 +211,11 @@ const ZPLoadMore = {
 		},
 		//触发加载更多时调用,from:0-滑动到底部触发；1-点击加载更多触发
 		_onLoadingMore(from = 'click') {
-			if (from === 'toBottom') {
-				if (!this.scrollToBottomBounceEnabled) {
-					if (this.scrollEnable) {
-						this.scrollEnable = false;
-						this.$nextTick(() => {
-							this.scrollEnable = true;
-						})
-					}
-				}
-				//#ifdef APP-VUE || H5
-				if (this.isIos) {
-					this.renderPropUsePageScroll = -1;
-					this.$nextTick(() => {
-						this.renderPropUsePageScroll = this.usePageScroll;
-					})
-				}
-				//#endif
+			if (from === 'toBottom' && !this.scrollToBottomBounceEnabled && this.scrollEnable) {
+				this.scrollEnable = false;
+				this.$nextTick(() => {
+					this.scrollEnable = true;
+				})
 			}
 			this.$emit('scrolltolower', from);
 			if (from === 'toBottom' && (!this.toBottomLoadingMoreEnabled || this.useChatRecordMode)) return;
@@ -236,7 +234,7 @@ const ZPLoadMore = {
 		//处理开始加载更多
 		_doLoadingMore() {
 			if (this.pageNo >= this.defaultPageNo && this.loadingStatus !== Enum.More.NoMore) {
-				this.pageNo++;
+				this.pageNo ++;
 				this._startLoading(false);
 				if (this.isLocalPaging) {
 					this._localPagingQueryList(this.pageNo, this.defaultPageSize, this.localPagingLoadingTime, (res) => {
@@ -250,12 +248,12 @@ const ZPLoadMore = {
 			}
 		},
 		//(预处理)判断当没有更多数据且分页内容未超出z-paging时是否显示没有更多数据的view
-		_preCheckShowLoadingMoreWhenNoMoreAndInsideOfPaging(newVal, scrollViewNode, pagingContainerNode) {
-			if (this.loadingStatus === Enum.More.NoMore && this.hideLoadingMoreWhenNoMoreByLimit > 0 && newVal.length) {
-				this.showLoadingMore = newVal.length > this.hideLoadingMoreWhenNoMoreByLimit;
-			} else if ((this.loadingStatus === Enum.More.NoMore && this.hideLoadingMoreWhenNoMoreAndInsideOfPaging && newVal.length) || (this.insideMore && this.insideOfPaging !== false && newVal.length)) {
+		_preCheckShowNoMoreInside(newVal, scrollViewNode, pagingContainerNode) {
+			if (this.loadingStatus === Enum.More.NoMore && this.hideNoMoreByLimit > 0 && newVal.length) {
+				this.showLoadingMore = newVal.length > this.hideNoMoreByLimit;
+			} else if ((this.loadingStatus === Enum.More.NoMore && this.hideNoMoreInside && newVal.length) || (this.insideMore && this.insideOfPaging !== false && newVal.length)) {
 				this.$nextTick(() => {
-					this._checkShowLoadingMoreWhenNoMoreAndInsideOfPaging(newVal, scrollViewNode, pagingContainerNode);
+					this._checkShowNoMoreInside(newVal, scrollViewNode, pagingContainerNode);
 				})
 				if (this.insideMore && this.insideOfPaging !== false && newVal.length) {
 					this.showLoadingMore = newVal.length;
@@ -265,37 +263,31 @@ const ZPLoadMore = {
 			}
 		},
 		//判断当没有更多数据且分页内容未超出z-paging时是否显示没有更多数据的view
-		async _checkShowLoadingMoreWhenNoMoreAndInsideOfPaging(totalData, oldScrollViewNode, oldPagingContainerNode) {
+		async _checkShowNoMoreInside(totalData, oldScrollViewNode, oldPagingContainerNode) {
 			try {
 				const scrollViewNode = oldScrollViewNode || await this._getNodeClientRect('.zp-scroll-view');
 				if (this.usePageScroll) {
 					if (scrollViewNode) {
 						const scrollViewTotalH = scrollViewNode[0].top + scrollViewNode[0].height;
 						this.insideOfPaging = scrollViewTotalH < this.windowHeight;
-						if (this.hideLoadingMoreWhenNoMoreAndInsideOfPaging) {
+						if (this.hideNoMoreInside) {
 							this.showLoadingMore = !this.insideOfPaging;
 						}
 						this._updateInsideOfPaging();
 					}
 				} else {
-					let pagingContainerH = 0;
-					let scrollViewH = 0;
 					const pagingContainerNode = oldPagingContainerNode || await this._getNodeClientRect('.zp-paging-container-content');
-					if (pagingContainerNode) {
-						pagingContainerH = pagingContainerNode[0].height;
-					}
-					if (scrollViewNode) {
-						scrollViewH = scrollViewNode[0].height;
-					}
+					const pagingContainerH = pagingContainerNode ? pagingContainerNode[0].height : 0;
+					const scrollViewH = scrollViewNode ? scrollViewNode[0].height : 0;
 					this.insideOfPaging = pagingContainerH < scrollViewH;
-					if (this.hideLoadingMoreWhenNoMoreAndInsideOfPaging) {
+					if (this.hideNoMoreInside) {
 						this.showLoadingMore = !this.insideOfPaging;
 					}
 					this._updateInsideOfPaging();
 				}
 			} catch (e) {
 				this.insideOfPaging = !totalData.length;
-				if (this.hideLoadingMoreWhenNoMoreAndInsideOfPaging) {
+				if (this.hideNoMoreInside) {
 					this.showLoadingMore = !this.insideOfPaging;
 				}
 				this._updateInsideOfPaging();
@@ -303,7 +295,7 @@ const ZPLoadMore = {
 		},
 		//是否要展示上拉加载更多view
 		_showLoadingMore(type) {
-			if (!(this.loadingStatus === Enum.More.Default ? this.nShowBottom : true)) return false;
+			if (!this.showLoadingMoreWhenReload && (!(this.loadingStatus === Enum.More.Default ? this.nShowBottom : true) || !this.totalData.length)) return false;
 			if (((!this.showLoadingMoreWhenReload || this.isUserPullDown || this.loadingStatus !== Enum.More.Loading) && !this.showLoadingMore) || 
 			(!this.loadingMoreEnabled && (!this.showLoadingMoreWhenReload || this.isUserPullDown || this.loadingStatus !== Enum.More.Loading)) || 
 			this.refresherOnly) return false;
@@ -324,5 +316,3 @@ const ZPLoadMore = {
 		},
 	}
 }
-
-export default ZPLoadMore;

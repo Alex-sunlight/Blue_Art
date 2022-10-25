@@ -5,12 +5,12 @@
 
 <!-- 空数据占位view，此组件支持easycom规范，可以在项目中直接引用 -->
 <template>
-	<view :class="{'zp-container':true,'zp-container-fixed':emptyViewFixed}" :style="[finalEmptyViewStyle]">
+	<view :class="{'zp-container':true,'zp-container-fixed':emptyViewFixed}" :style="[finalEmptyViewStyle]" @click="emptyViewClick">
 		<view class="zp-main">
 			<image v-if="!emptyViewImg.length" class="zp-main-image" :style="[emptyViewImgStyle]" :src="emptyImg" />
 			<image v-else class="zp-main-image" mode="aspectFit" :style="[emptyViewImgStyle]" :src="emptyViewImg" />
 			<text class="zp-main-title" :style="[emptyViewTitleStyle]">{{emptyViewText}}</text>
-			<text v-if="showEmptyViewReload" class="zp-main-error-btn" :style="[emptyViewReloadStyle]" @click="reloadClick">{{emptyViewReloadText}}</text>
+			<text v-if="showEmptyViewReload" class="zp-main-error-btn" :style="[emptyViewReloadStyle]" @click.stop="reloadClick">{{emptyViewReloadText}}</text>
 		</view>
 	</view>
 </template>
@@ -18,10 +18,10 @@
 <script>
 	import zStatic from '../z-paging/js/z-paging-static'
 	export default {
+		name: "z-paging-empty-view",
 		data() {
 			return {
-				base64Empty: zStatic.base64Empty,
-				base64Error: zStatic.base64Error
+				
 			};
 		},
 		props: {
@@ -91,7 +91,7 @@
 		},
 		computed: {
 			emptyImg() {
-                return this.isLoadFailed ? this.base64Error : this.base64Empty;
+                return this.isLoadFailed ? zStatic.base64Error : zStatic.base64Empty;
 			},
 			finalEmptyViewStyle(){
 				this.emptyViewStyle['z-index'] = this.emptyViewZIndex;
@@ -101,6 +101,9 @@
 		methods: {
 			reloadClick() {
 				this.$emit('reload');
+			},
+			emptyViewClick() {
+				this.$emit('viewClick');
 			}
 		}
 	}
