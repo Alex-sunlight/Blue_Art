@@ -116,7 +116,7 @@
 				<uni-notice-bar show-icon scrollable :text=announcement />
 			</view>
 
-			<uni-section title="" type="line">
+			<uni-section  type="line">
 				<view class="uni-padding-wrap uni-common-mt">
 					<uni-segmented-control :current="current" :values="products" :style-type="styleType"
 						:active-color="activeColor" @clickItem="onClickItem" />
@@ -183,16 +183,16 @@
 				stake:[],
 				announcement: '',
 				items: ['选项卡1', '选项卡2', '选项卡3'],
-				styles: [{
-						value: 'button',
-						text: '按钮',
-						checked: true
-					},
-					{
-						value: 'text',
-						text: '文字'
-					}
-				],
+				// styles: [{
+				// 		value: 'button',
+				// 		text: '按钮',
+				// 		checked: true
+				// 	},
+				// 	{
+				// 		value: 'text',
+				// 		text: '文字'
+				// 	}
+				// ],
 				colors: ['#007aff', '#4cd964', '#dd524d'],
 				current: 0,
 				colorIndex: 0,

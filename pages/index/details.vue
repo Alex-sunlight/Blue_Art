@@ -115,7 +115,7 @@
 	.pages-details {
 		width: 100%;
 		min-height: 100vh;
-		padding-bottom: 400rpx;
+		padding-bottom: 500rpx;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -201,21 +201,22 @@
 
 	.details_bottom {
 		position: fixed;
-		bottom: 0;
+		bottom: 50rpx;
 		width: 100%;
 		height: 80rpx;
 	}
 
 	.details_bt {
 		width: 80%;
-		font-size: 20rpx;
+		font-size: 30rpx;
 	}
 
 	.details_cen {
 		width: 700rpx;
-		height: 500rpx;
+		// height: 500rpx;
 		border-radius: 20rpx;
 		margin-top: 50rpx;
+		margin-bottom: 100rpx;
 		padding: 20rpx;
 		background-color: #8f91b0;
 		color: #fff;
