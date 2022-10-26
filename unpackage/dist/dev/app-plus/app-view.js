@@ -158,7 +158,6 @@ if (uni.restoreGlobal) {
   uni.restoreGlobal(weex, plus, setTimeout, clearTimeout, setInterval, clearInterval);
 }
 __definePage('pages/index/index', function () {return Vue.extend(__webpack_require__(/*! pages/index/index.vue?mpType=page */ 2).default);});
-__definePage('pages/index/index', function () {return Vue.extend(__webpack_require__(/*! pages/index/index.vue?mpType=page */ 2).default);});
 __definePage('pages/my/my', function () {return Vue.extend(__webpack_require__(/*! pages/my/my.vue?mpType=page */ 92).default);});
 __definePage('pages/my/collect', function () {return Vue.extend(__webpack_require__(/*! pages/my/collect.vue?mpType=page */ 100).default);});
 __definePage('pages/my/news', function () {return Vue.extend(__webpack_require__(/*! pages/my/news.vue?mpType=page */ 108).default);});

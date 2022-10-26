@@ -4,6 +4,7 @@
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "BlueArt",
+				// "navigationStyle": "custom",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [
@@ -24,14 +25,6 @@
 						]
 					}
 				}
-			}
-		},
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "首页",
-				"navigationBarTitleText": "uni-app",
-				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -176,7 +169,7 @@
 		]
 	},
 	"globalStyle": {
-		// "navigationBarTextStyle": "#fff",
+		// "navigationBarTextStyle": "custom",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#3972ab",
 		"backgroundColor": "#3972ab"
