@@ -3,24 +3,24 @@
 		<!-- nft详情 -->
 		<view class="stake_area">
 			<view class="uni-margin-wrap">
-				<image class="stake_area_img" src="../../static/image/stake2.png"></image>
+				<image class="stake_area_img" :src="nftImg.image"></image>
 			</view>
 			<view class="stake_information">
 				<view class="information_bottom">
-					<h3 class="h3">Doreen</h3>
+					<h3 class="h3">{{nftImg.english_name}}</h3>
 					<view class="math_box">
 						<view style="display: flex;">
 							<view class="faxingSize">
 								发行量
 							</view>
 							<view class="math">
-								5500
+								{{nftImg.has_buy}}/{{nftImg.fx_num}}
 							</view>
 						</view>
 						<view class="priceBox">
 							<image src="../../static/image/usdt.png" class="usdtIcon"></image>
 							<view class="price">
-								200
+								{{nftImg.price}}
 							</view>
 						</view>
 					</view>
@@ -30,21 +30,21 @@
 		<view class="details_cen">
 			<h4>购买须知</h4>
 			<br>
-			<h5>1.该数字藏品为虚拟数字商品，而非实物，仅限14周岁以上用户购买。一经售出，概不退换。本商品原文件不支持本体下载。</h5>
-		    <br>
+			<h5>1.该数字藏品为虚拟数字商品，而非实物，仅限14周岁以上用户购买。一经售出，概不退换。本商品原文件不支持本地下载。</h5>
+			<br>
 			<h5>2. 公司将严格遵守相关法律法规监管要求，依法使用您的信息，并对所有担保客户以及投资用户信息进行保密。</h5>
-            <br>
-			<h5>3. 请勿对数字藏品进行炒作、欺诈或以任何其他非法方式进行使用。</h5>		
-		    <br>
-			<h5>4. 如有任何疑问请联系我们，做种解释权归BlueArt所有。</h5>
+			<br>
+			<h5>3. 请勿对数字藏品进行炒作、欺诈或以任何其他非法方式进行使用。</h5>
+			<br>
+			<h5>4. 如有任何疑问请联系我们，最终解释权归BlueArt所有。</h5>
 		</view>
 		<view class="details_bottom">
-			<view style="width: 100%;height: 20rpx;">
-			</view>
-			<view class="priceBoxs">
+			<!-- <view style="width: 100%;height: 20rpx;">
+			</view> -->
+			<!-- <view class="priceBoxs">
 				<image src="../../static/image/usdt.png" class="usdtIcons"></image>
 				<view class="price">
-					200
+					{{nftImg.price}}
 				</view>
 				<view style="width: 300rpx;">
 				</view>
@@ -53,21 +53,61 @@
 					<span style="margin: 0rpx 20rpx;">{{math}}</span>
 					<span @click="math++">+</span>
 				</view>
-			</view>
-			<view style="width: 100%;height: 18rpx;">
-			</view>
-			<button type="primary" class="details_bt">购买</button>
+			</view> -->
+			<!-- <view style="width: 100%;height: 18rpx;">
+			</view> -->
+			<button @click="buyNftToStake()" type="primary" class="details_bt">购买</button>
 		</view>
 	</view>
 </template>
 
 <script>
+	const app = getApp().globalData
 	export default {
 		data() {
 			return {
 				math: 0,
+				nftImg: [],
+				id: '',
+				option: []
 			}
-		}
+		},
+		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
+			this.option = option
+			this.getNftSkuDetails(this.option.id)
+		},
+		methods: {
+			getNftSkuDetails(option) {
+				try {
+					app.$get('nft/getNftSkuDetails', {
+						nft_id: option
+					}).then(res => {
+						if (res.data.status == 1) {
+							this.nftImg = res.data.result
+							this.id = res.data.result.id
+							console.log(res.data.result, '获取nft详情')
+						}
+					})
+				} catch (e) {
+					//TODO handle the exception
+				}
+			},
+			buyNftToStake() {
+				try {
+					app.$post('stake/buyNftToStake', {
+						nft_id: this.id
+					}).then(res => {
+						if (res.data.status == 1) {
+							app.$tips('success')
+							this.getNftSkuDetails(this.option.id)
+							console.log(res, '获取购买nft并质押详情')
+						}
+					})
+				} catch (e) {
+					//TODO handle the exception
+				}
+			},
+		},
 	}
 </script>
 
@@ -163,15 +203,15 @@
 		position: fixed;
 		bottom: 0;
 		width: 100%;
-		height: 180rpx;
-		background-color: #8f91b0;
+		height: 80rpx;
 	}
 
 	.details_bt {
 		width: 80%;
 		font-size: 20rpx;
 	}
-	.details_cen{
+
+	.details_cen {
 		width: 700rpx;
 		height: 500rpx;
 		border-radius: 20rpx;
