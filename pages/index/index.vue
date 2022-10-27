@@ -6,13 +6,13 @@
 			<uni-drawer ref="showLeft" mode="left" :width="320" @change="change($event,'showLeft')">
 				<view class="drawer_top">
 					<view class="drawer_imgSize_box">
-						<image class="drawer_image" src="../../static/image/stake8.png"></image>
+						<image class="drawer_image" :src="avatar"></image>
 						<view class="drawer_top_size">
 							<view class="drawer_name">
-								<h3>ikun</h3>
+								<h3>{{user.nickname}}</h3>
 							</view>
 							<view class="drawer_id">
-								用户账号：3043068032
+								用户账号：{{user.email}}
 							</view>
 						</view>
 					</view>
@@ -171,6 +171,9 @@
 	export default {
 		data() {
 			return {
+				user: [],
+				avatar: "../../static/image/stake8.png",
+				nickname: 'BlueArt',
 				userInfo: app.userInfo,
 				activeName: "1",
 				indicatorDots: true,
@@ -203,6 +206,7 @@
 			}
 		},
 		onLoad() {
+			this.userInfos()
 			this.getNewListByType()
 			this.getNewListByTypeGG()
 			this.getStakeProduct()
@@ -259,6 +263,20 @@
 		},
 
 		methods: {
+			// 个人信息
+			userInfos() {
+				try {
+					app.$get('userCenter/userInfo').then(res => {
+						if (res.data.status == 1) {
+							this.user = res.data.result
+							this.avatar = res.data.result.avatar
+							console.log(this.user, '个人信息')
+						}
+					})
+				} catch (e) {
+					//TODO handle the exception
+				}
+			},
 			onClickItem(e) {
 				if (this.current !== e.currentIndex) {
 					this.current = e.currentIndex
@@ -466,7 +484,6 @@
 </script>
 
 <style lang="scss">
-	@import url("//unpkg.com/element-ui@2.15.10/lib/theme-chalk/index.css");
 
 	/deep/ .el-tabs__item.is-active {
 		color: #fff;
