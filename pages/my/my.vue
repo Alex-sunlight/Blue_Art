@@ -2,13 +2,13 @@
 	<view class="pages-my">
 		<view @click="ProfileSettings()" class="drawer_top">
 			<view class="drawer_imgSize_box">
-				<image class="drawer_image" src="../../static/image/stake8.png"></image>
+				<image class="drawer_image" :src="avatar"></image>
 				<view class="drawer_top_size">
 					<view class="drawer_name">
-						<h3>ikun</h3>
+						<h3>{{user.nickname}}</h3>
 					</view>
 					<view class="drawer_id">
-						用户账号：3043068032
+						用户账号：{{user.email}}
 					</view>
 				</view>
 			</view>
@@ -153,17 +153,32 @@
 </template>
 
 <script>
+	const app = getApp().globalData
 	export default {
 		data() {
 			return {
-				
+				user:[],
+				avatar:'../../static/image/stake8.png'
 			}
 		},
 		onLoad() {
-			
+			this.userInfo()
 		},
 		methods:{
-			
+			// 个人信息
+			userInfo() {
+				try {
+					app.$get('userCenter/userInfo').then(res => {
+						if (res.data.status == 1) {
+							this.user = res.data.result
+							this.avatar = res.data.result.avatar
+							console.log(this.user, '个人信息')
+						}
+					})
+				} catch (e) {
+					//TODO handle the exception
+				}
+			},
 			ProfileSettings(){
 				uni.navigateTo({
 					url: '../settings/ProfileSettings'

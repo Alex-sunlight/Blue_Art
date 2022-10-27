@@ -35,65 +35,40 @@ const upload = (url, data = { filePath: '' }, isArray = false) => {
 	if (langType && langType != '') {
 		lang = langType
 	};
-	if (isArray) {
-		return new Promise((resolve, reject) => {
-			// uni.showLoading();
-			console.log(data.filePath)
-			uni.uploadFile({
-				url: baseUrl + prefix + url,
-				files: data.files,
-				formData: data.formData,
-				// filePath:data.filePath,
-				name: "image",
-				header: {
-					token: token,
-					lang: lang
-				},
-				success: (res) => {
-					console.log(res);
-					uni.hideLoading();
-					const json = JSON.parse(res.data);
-					console.log(json)
-					if (json.status == 1) {
-						//请求成功
-						resolve(json);
-					} else {
-						const app = getApp().globalData;
-						app.$tips('网络开小差~');
-					};
-				},
-			})
+	const t = parseInt((new Date().getTime() / 1000).toString());
+	const n = Math.floor(Math.random() * 1000) + 1;
+	const s = "drivecar2_" + t.toString() + '_' + n;
+	const sign = secret(s);
+	return new Promise((resolve, reject) => {
+		// uni.showLoading();
+		uni.uploadFile({
+			url: baseUrl + prefix + url,
+			filePath: data.filePath,
+			formData: data.formData,
+			name: "image",
+			header: {
+				token: token,
+				lang: lang,
+				sign: sign
+			},
+			success: (res) => {
+				console.log(res)
+				const json = JSON.parse(res.data);
+				console.log(json)
+				uni.hideLoading();
+				if (json.status == 1) {
+					//请求成功
+					resolve(json);
+				} else {
+					const app = getApp().globalData;
+					app.$tips('网络开小差~');
+				};
+			},
+			fail: (err) => {
+				console.log(err)
+			}
 		})
-	} else {
-		return new Promise((resolve, reject) => {
-			// uni.showLoading();
-			uni.uploadFile({
-				url: baseUrl + prefix + url,
-				filePath: data.filePath,
-				formData: data.formData,
-				name: "image",
-				header: {
-					token: token,
-				},
-				success: (res) => {
-					console.log(res)
-					const json = JSON.parse(res.data);
-					console.log(json)
-					uni.hideLoading();
-					if (json.status == 1) {
-						//请求成功
-						resolve(json);
-					} else {
-						const app = getApp().globalData;
-						app.$tips('网络开小差~');
-					};
-				},
-				fail: (err) => {
-					console.log(err)
-				}
-			})
-		})
-	}
+	})
 
 }
 const createdPromise = (url, data = {}, method = 'GET') => {
