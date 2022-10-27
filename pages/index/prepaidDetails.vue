@@ -29,8 +29,14 @@
 				<text>
 					充值状态
 				</text>
-				<text>
-					{{this.prepaidData.status == 0 ? '待充值':'充值成功'}}
+				<text v-if="this.prepaidData.status == 0">
+					待充值
+				</text>
+				<text v-if="this.prepaidData.status == 1">
+					充值成功
+				</text>
+				<text v-if="this.prepaidData.status == 2">
+					取消充值
 				</text>
 			</view>
 			<view class="detailsList">
@@ -50,10 +56,14 @@
 				</text>
 			</view>
 		</view>
+		<view class="cancelTopup" v-if="this.prepaidData.status == 0? true:false" @click="cancel()">
+			取消充值
+		</view>
 	</view>
 </template>
 
 <script>
+	const app = getApp().globalData;
 	export default {
 		data() {
 			return {
@@ -70,7 +80,39 @@
 				}
 			},
 		methods:{
-		
+			// 取消充值
+			cancel(){
+				const data = {
+					recharge_id: this.prepaidData.id,
+				};
+				app.$post('wallet/cancelRecharge', data)
+									.then(res => {
+										console.log('打印取消充值',res.data);
+										if(res.data.status ==1) {
+											// let datas = {
+											// 	address:res.data.result.address,
+											// 	amount:this.aegisAmount,
+											// }
+											uni.showToast({
+											    title: '取消充值成功',
+											    duration: 500,
+												icon:'none'
+											})
+											setTimeout(()=>{
+												uni.switchTab({
+													url: './index'
+												});
+											},1000)
+											// uni.hideLoading();
+										}else {
+											uni.showToast({
+											    title: res.data.info,
+											    duration: 2000,
+												icon:'none'
+											})
+										}
+									})
+			}
 	
 		}
 	}
@@ -115,6 +157,20 @@
 					color: #fff;
 				}
 			}
+		}
+		.cancelTopup {
+			width: 90%;
+			margin: 0 auto;
+			margin-top: 120rpx;
+			height: 80rpx;
+			text-align: center;
+			line-height: 80rpx;
+			font-size: 28rpx;
+			// display: flex;
+			color: #fff;
+			// flex-wrap: wrap;
+			border: 1px solid #c0c0c0;
+			border-radius: 12rpx;
 		}
 		}
 		

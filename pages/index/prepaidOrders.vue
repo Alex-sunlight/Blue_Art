@@ -1,12 +1,15 @@
 <template>
 	<!-- 提现 -->
 	<view class="pages-recharge">
-		<select name="" id="">
+		<view class="select">
+				<option value="">全部订单</option>
+		</view>
+		<!-- <select name="" id="">
 			<option value="">全部订单</option>
 			<option value="">审核中</option>
 			<option value="">到账成功</option>
 			<option value="">拒绝审核</option>
-		</select>
+		</select> -->
 		<view class="prepaidList">
 			<view class="uAegisList" @click="prepiDetails(item)" v-for="(item, index) in prepaidDataList" :key = "index">
 				<image src="../../static/image/usdt.png" mode=""></image>
@@ -22,8 +25,14 @@
 					<text>
 						{{item.ys_amount}}
 					</text>
-					<text>
-						{{item.status == 0?'待充值':'充值成功'}}
+					<text v-if="item.status == 0">
+						待充值
+					</text>
+					<text v-if="item.status == 1">
+						充值成功
+					</text>
+					<text v-if="item.status == 2">
+						取消充值
 					</text>
 				</view>
 			</view>
@@ -93,9 +102,10 @@
 		flex-direction: column;
 		// align-items: center;
 		background-color: #3972ab;
-		select {
+		.select {
 			width: 180rpx;
 			height: 60rpx;
+			line-height: 60rpx;
 			margin-top: 20rpx;
 			margin-left: 20rpx;
 			font-size: 24rpx;
@@ -103,12 +113,12 @@
 			background-color: #7f7f7f;
 			color: #fff;
 			border-radius: 12rpx;
-			option {
-				width: 100%;
-				height: 30rpx;
-				color: #c0c0c0;
-				background-color: #000;
-			}
+			// option {
+			// 	width: 100%;
+			// 	height: 30rpx;
+			// 	color: #c0c0c0;
+			// 	background-color: #000;
+			// }
 		}
 		.prepaidList {
 			width: 100%;
