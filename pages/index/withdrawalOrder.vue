@@ -1,49 +1,58 @@
 <template>
 	<!-- 提现 -->
 	<view class="pages-recharge">
-		<select name="" id="">
+		<view class="select">
+				<option value="">全部订单</option>
+		</view>
+		<!-- <select name="" id="">
 			<option value="">全部订单</option>
 			<option value="">审核中</option>
 			<option value="">到账成功</option>
 			<option value="">拒绝审核</option>
-		</select>
-		<view class="prepaidList" v-if="prepaidStatus">
-			<view class="uAegisList">
+		</select> -->
+		<view class="prepaidList">
+			<view class="uAegisList" @click="prepiDetails(item)" v-for="(item, index) in prepaidDataList" :key = "index">
 				<image src="../../static/image/usdt.png" mode=""></image>
 				<view class="uDun">
 					<text>
 						U盾充值
 					</text>
 					<text>
-						2022-10-22 10:45:52
+						{{item.create_at}}
 					</text>
 				</view>
 				<view class="priceStatus">
 					<text>
-						300
+						{{item.ys_amount}}
 					</text>
-					<text>
-						已取消
+					<text v-if="item.status == 0">
+						待充值
+					</text>
+					<text v-if="item.status == 1">
+						充值成功
+					</text>
+					<text v-if="item.status == 2">
+						取消充值
 					</text>
 				</view>
 			</view>
-		</view>
-		
-		<view class="dataNull">
-			<image src="../../static/image/kongbox.png" mode=""></image>
-			<text>空空如也</text>
 		</view>
 	</view>
 </template>
 
 <script>
+		const app = getApp().globalData;
 	export default {
 		data() {
 			return {
 				aegisAmount:0,
-				prepaidStatus:false
+				prepaidDataList:null
 			}
 			
+		},
+		onLoad() {
+			// this.queryOrder()
+			this.prepaidList()
 		},
 		methods:{
 			aegis(){
@@ -51,6 +60,41 @@
 					url: './aegisTopUp'
 				});
 			},
+			// 获取充值订单列表
+			prepaidList(){
+				app.$get('wallet/WithdrawLog')
+					.then(res => {
+						console.log('获取充值订单列表', res.data.result);
+						// address
+						this.prepaidDataList = res.data.result.data
+					})
+			},
+			// 充值订单详情
+			prepiDetails(val){
+				let datas = {
+					amount:val.amount,
+					fee:val.fee,
+					actual:val.actual,
+					trans_hash: val.trans_hash,
+					status:val.status,
+					address:val.address
+					// create_at:val.create_at,
+					// currency_id:val.amount,
+					// fee:val.fee,
+					// id:val.id,
+					// ordersn:val.ordersn,
+					
+					// tradeId:val.tradeId,
+					
+					// user_id:val.user_id,
+					// wallet_id:val.wallet_id,
+					// ys_amount:val.ys_amount
+				}
+				// JSON.stringify(res.data.result.data.address)
+				uni.navigateTo({
+					url: '../../pages/index/uWithdrawalOrder?data='+JSON.stringify(datas)
+				});
+			}
 		}
 	}
 </script>
@@ -63,9 +107,10 @@
 		flex-direction: column;
 		// align-items: center;
 		background-color: #3972ab;
-		select {
+		.select {
 			width: 180rpx;
 			height: 60rpx;
+			line-height: 60rpx;
 			margin-top: 20rpx;
 			margin-left: 20rpx;
 			font-size: 24rpx;
@@ -73,12 +118,12 @@
 			background-color: #7f7f7f;
 			color: #fff;
 			border-radius: 12rpx;
-			option {
-				width: 100%;
-				height: 30rpx;
-				color: #c0c0c0;
-				background-color: #000;
-			}
+			// option {
+			// 	width: 100%;
+			// 	height: 30rpx;
+			// 	color: #c0c0c0;
+			// 	background-color: #000;
+			// }
 		}
 		.prepaidList {
 			width: 100%;
@@ -151,37 +196,6 @@
 						// border: 1px solid pink;
 					}
 				}
-			}
-		}
-		.dataNull {
-			width: 99%;
-			margin: 0 auto;
-			// display: flex;
-			// flex-wrap: wrap;
-			margin-top: 30rpx;
-			min-height: 1200rpx;
-			// border: 1px solid red;
-			image {
-				display: block;
-				width: 100rpx;
-				height: 100rpx;
-				margin-left: 50%;
-				margin-top: 50%;
-				transform: translateX(-50%);
-				// border: 1px solid red;
-			}
-			text {
-				display: block;
-				width: 150rpx;
-				height: 60rpx;
-				text-align: center;
-				margin-left: 50%;
-				font-size: 24rpx;
-				line-height: 60rpx;
-				color: #fff;
-				// margin-top: 10%;
-				transform: translateX(-50%);
-				// border: 1px solid red;
 			}
 		}
 	}
