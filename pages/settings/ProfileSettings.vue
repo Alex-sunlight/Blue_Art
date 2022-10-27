@@ -1,20 +1,11 @@
 <template>
 	<view class="pages-ProfileSettings">
 		<view class="drawer_assets">
-             <view class="imageBox">
-             	<!-- <image @click="xc()" class="drawer_image" :src="avatar"></image> -->
-				<uni-file-picker 
-					file-mediatype="image"
-					:del-icon=false
-					mode="grid"
-					file-extname="png,jpg"
-					:limit="1"
-					@progress="progress" 
-					@success="success" 
-					@fail="fail" 
-					@select="selectimg"
-				/>
-             </view>
+			<view class="imageBox">
+				<!-- <image @click="xc()" class="drawer_image" :src="avatar"></image> -->
+				<uni-file-picker file-mediatype="image" :del-icon=false mode="grid" file-extname="png,jpg" :limit="1"
+					@progress="progress" @success="success" @fail="fail" @select="selectimg" />
+			</view>
 
 			<view class="nameBox">
 				<view class="name">
@@ -91,11 +82,13 @@
 				this.editInfo()
 			},
 			selectimg(callback) {
-				console.log('callback',callback)
+				console.log('callback', callback)
 				let that = this;
-				const data = { filePath: callback.tempFilePaths[0] }
+				const data = {
+					filePath: callback.tempFilePaths[0]
+				}
 				app.$upload('userCenter/uploadAvatar', data).then(res => {
-					console.log('res.data.result.file_url',res)
+					console.log('res.data.result.file_url', res)
 					if (res.status == 1) {
 						that.avatar = res.result.url
 						console.log(res, '上传头像')
@@ -104,26 +97,26 @@
 				})
 			},
 			uploadImg() {
-			    console.log('this.headerImage[0]', this.headerImage[0]);
-			    // let formData = new FormData()
-			    // formData.append('file', this.headerImage[0])
-			    // formData.append('type', this.types)
-			    // // formData.append('file','111')
-			    // console.log('formData', formData.get('file'));
-			    
-			   try {
-			   	app.$post('userCenter/uploadAvatar', {
-			   		image: this.avatar,
-			   	}).then(res => {
-			   		if (res.data.status == 1) {
-			   			console.log(res, '上传头像')
-			   		}
-			   	})
-			   } catch (e) {
-			   	//TODO handle the exception
-			   }
-				
-			   },
+				console.log('this.headerImage[0]', this.headerImage[0]);
+				// let formData = new FormData()
+				// formData.append('file', this.headerImage[0])
+				// formData.append('type', this.types)
+				// // formData.append('file','111')
+				// console.log('formData', formData.get('file'));
+
+				try {
+					app.$post('userCenter/uploadAvatar', {
+						image: this.avatar,
+			 	}).then(res => {
+						if (res.data.status == 1) {
+							console.log(res, '上传头像')
+						}
+					})
+				} catch (e) {
+					//TODO handle the exception
+				}
+
+			},
 
 		},
 	}
@@ -172,6 +165,7 @@
 
 	.name {
 		margin-right: 50rpx;
+		white-space: nowrap;
 	}
 
 	.myButton {
@@ -190,7 +184,8 @@
 		display: flex;
 		justify-content: center;
 	}
-	.imageBox{
+
+	.imageBox {
 		width: 100%;
 		display: flex;
 		justify-content: center;
