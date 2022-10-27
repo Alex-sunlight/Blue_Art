@@ -27,11 +27,11 @@
 				<view class="drawer_assets">
 					<view class="assets_box">
 						<view class="assets">
-							<h3 style="color: #fff;">0.00</h3>
+							<h3 style="color: #fff;">{{totalAssets}}</h3>
 							<h6 style="color: #d9d9d9;">总资产</h6>
 						</view>
 						<view class="assets">
-							<h3 style="color: #fff;">0.00</h3>
+							<h3 style="color: #fff;">{{balance}}</h3>
 							<h6 style="color: #d9d9d9;">可用余额</h6>
 						</view>
 					</view>
@@ -39,11 +39,11 @@
 						<!-- 线条 -->
 					</view>
 					<view class="assets_box">
-						<view @click="toRecharge()" class="assets">
+						<view @click="toRecharge()" class="assets assetsg">
 							<image src="../../static/image/recharge.png" class="iconImg"></image>
 							<h6 style="color: #d9d9d9;">U盾充值</h6>
 						</view>
-						<view @click="toWithdrawal()" class="assets">
+						<view @click="toWithdrawal()" class="assets assetsg">
 							<image src="../../static/image/withdraw.png" class="iconImg"></image>
 							<h6 style="color: #d9d9d9;">提现</h6>
 						</view>
@@ -199,7 +199,11 @@
 				activeColor: '#4cd964',
 				styleType: 'button',
 				products: [],
-				carousel:''
+				carousel:'',
+				// 总资产
+				totalAssets:0,
+				// 余额
+				balance:0
 			}
 		},
 		onLoad() {
@@ -207,6 +211,8 @@
 			this.getNewListByTypeGG()
 			this.getStakeProduct()
 			this.getNftByStakeId()
+			// 查询个人资产
+			this.theAsset()
 		},
 
 		created() {
@@ -259,6 +265,23 @@
 		},
 
 		methods: {
+			// 查询资产
+			theAsset(){
+				app.$get('userCenter/getMyBalance')
+						.then(res => {
+							console.log('查询个人资产',res.data.result);
+							this.totalAssets = res.data.result.data.all_money;
+							this.balance = res.data.result.data.can_money;
+							// if(res.data.result.flag == 1) {
+							// 	uni.navigateTo({
+							// 		url: './addressReceipt'
+							// 	});
+							// }
+							// if(res.data.result.flag == 2) {
+								
+							// }
+						})
+			},
 			onClickItem(e) {
 				if (this.current !== e.currentIndex) {
 					this.current = e.currentIndex
@@ -654,6 +677,7 @@
 
 	.assets_box {
 		width: 100%;
+		// margin-top: 30rpx;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -666,7 +690,12 @@
 		justify-content: center;
 		align-items: center;
 	}
-
+	.assetsg {
+		margin-top: 20rpx;
+	}
+	.assetsg h6{
+		font-size: 26rpx;
+	}
 	// 功能
 	.drawer_Function {
 		width: 540rpx;
