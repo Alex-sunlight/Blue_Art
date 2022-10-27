@@ -14,15 +14,10 @@
             <image class="drawer_image" :src="users.avatar"></image>
             <view class="drawer_top_size">
               <view class="drawer_name">
-                <<<<<<< HEAD
-                <h3>{{ users.nickname }}</h3>
-                =======
+               
                 <h3>{{ users.nickname }}</h3>
               </view>
-              <view class="drawer_id drawer_ids">
-                账号：{{ users.email }}
-                >>>>>>> 3d82b1e9bcd436ecc3713aead59ea04ad981651d
-              </view>
+             
               <view class="drawer_id"> 账号：{{ users.email }} </view>
             </view>
           </view>
