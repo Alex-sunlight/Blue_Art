@@ -6,12 +6,12 @@
 			<uni-drawer ref="showLeft" mode="left" :width="320" @change="change($event, 'showLeft')">
 				<view class="drawer_top">
 					<view class="drawer_imgSize_box">
-						<image class="drawer_image" :src="avatar"></image>
+						<image class="drawer_image" :src="users.avatar"></image>
 						<view class="drawer_top_size">
 							<view class="drawer_name">
-								<h3>{{ user.nickname }}</h3>
+								<h3>{{ users.nickname }}</h3>
 							</view>
-							<view class="drawer_id"> 用户账号：{{ user.email }} </view>
+							<view class="drawer_id"> 账号：{{ users.email }} </view>
 						</view>
 					</view>
 					<uni-icons type="forward" size="20" color="#fff"></uni-icons>
@@ -220,17 +220,20 @@
 				totalAssets: 0,
 				// 余额
 				balance: 0,
+				// 个人信息
+				users: ''
 			}
 		},
 		onLoad() {
-			this.userInfos()
 			this.getNewListByType()
 			this.getNewListByTypeGG()
 			this.getStakeProduct()
 			this.getNftByStakeId()
 			// 查询个人资产
 			this.theAsset()
-			
+			// 查询个人信息
+			this.getInformation()
+			// getInformation()
 		},
 
 		created() {
@@ -256,34 +259,34 @@
 			this.userInfo = app.userInfo
 			let that = this
 			uni.getStorage({
-				key: 'token',
-				success: (res) => {
-					if (res) {
-						that.getVarsion()
+					key: 'token',
+					success: (res) => {
+						if (res) {
+							that.getVarsion()
+						}
+					},
+					fail: () => {
+						uni.reLaunch({
+							url: '../login/login'
+						})
 					}
-				},
-				fail: () => {
-					uni.reLaunch({
-						url: '../login/login'
-					})
-				}
-			})
+				});
 			uni.getLocation({
-				isHighAccuracy: true,
-				accuracy: 'best',
-				geocode: true,
-				success: (res) => {
-					app.locInfo = res
-				},
-				fail: (err) => {
-					// console.log(err);
-				}
-			});
+					isHighAccuracy: true,
+					accuracy: 'best',
+					geocode: true,
+					success: (res) => {
+						app.locInfo = res
+					},
+					fail: (err) => {
+						// console.log(err);
+					}
+				});
 			this.lg = app.getLg2()
 		},
 
 		methods: {
-			
+
 			// 个人信息
 			userInfos() {
 				try {
@@ -297,6 +300,46 @@
 				} catch (e) {
 					//TODO handle the exception
 				}
+			},
+			// 查询资产
+			theAsset() {
+				app.$get('userCenter/getMyBalance')
+				fail: () => {
+					uni.reLaunch({
+						url: '../login/login'
+					})
+				}
+			},
+		
+	},
+
+	methods: {
+			// 个人信息
+			userInfos() {
+				try {
+					app.$get('userCenter/userInfo').then(res => {
+						if (res.data.status == 1) {
+							this.user = res.data.result
+							this.avatar = res.data.result.avatar
+							console.log(this.user, '个人信息')
+						}
+					})
+				} catch (e) {
+					//TODO handle the exception
+				}
+			},
+			// 获取个人信息
+			getInformation() {
+				app.$get('userCenter/userInfo')
+					.then(res => {
+						console.log('获取个人信息1', res.data);
+						console.log('获取个人信息', res.data.result);
+						if (res.data.status == 1) {
+							this.users = res.data.result;
+						}
+
+					})
+
 			},
 			// 查询资产
 			theAsset() {
@@ -688,6 +731,11 @@
 		justify-content: center;
 		align-items: center;
 		background-color: #3972ab;
+	}
+
+	.drawer_id {
+		font-size: 10px;
+		// border: 1px solid red;
 	}
 
 	.drawer_medal {
