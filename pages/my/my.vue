@@ -15,7 +15,7 @@
 			<uni-icons type="forward" size="20" color="#fff"></uni-icons>
 		</view>
 		<!-- 静态收益 -->
-		<view class="drawer_assets">
+		<view @click="toStatic()" class="drawer_assets">
 			<h4 style="color: #fff;margin-left: 30rpx;">静态收益</h4>
 			<br>
 			<view class="assets_box">
@@ -30,7 +30,7 @@
 			</view>
 		</view>
 		<!-- 动态收益 -->
-		<view class="drawer_assets">
+		<view @click="toDynamic()" class="drawer_assets">
 			<h4 style="color: #fff;margin-left: 30rpx;">动态收益</h4>
 			<br>
 			<view class="assets_box">
@@ -158,13 +158,60 @@
 		data() {
 			return {
 				user:[],
-				avatar:'../../static/image/stake8.png'
+				avatar:'../../static/image/stake8.png',
+				award_type0: '',
+				award_type2: ''
 			}
 		},
 		onLoad() {
 			this.userInfo()
+			// 查询质押收益
+			this.getStakeReward()
+			this.getStakeReward2()
 		},
 		methods:{
+			toStatic(){
+				uni.navigateTo({
+					url: './static'
+				})
+			},
+			toDynamic(){
+				uni.navigateTo({
+					url: './dynamic'
+				})
+			},
+			// 查询质押收益
+			getStakeReward() {
+				try {
+					app.$get('stake/getStakeReward', {
+						order_id: '',
+						award_type: 0
+					}).then(res => {
+						if (res.data.status == 1) {
+							console.log(res, '查询质押收益')
+							this.award_type0 = res.data.result.data.bonus
+						}
+					})
+				} catch (e) {
+					//TODO handle the exception
+				}
+			},
+			// 查询质押收益
+			getStakeReward2() {
+				try {
+					app.$get('stake/getStakeReward', {
+						order_id: '',
+						award_type: 2
+					}).then(res => {
+						if (res.data.status == 1) {
+							console.log(res, '查询质押收益2')
+							this.award_type2 = res.data.result.data.bonus
+						}
+					})
+				} catch (e) {
+					//TODO handle the exception
+				}
+			},
 			// 个人信息
 			userInfo() {
 				try {

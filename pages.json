@@ -146,6 +146,18 @@
 			"style": {
 				"navigationBarTitleText": "提现订单"
 			}
+		},
+		{
+			"path": "pages/my/static",
+			"style": {
+				"navigationBarTitleText": "静态收益"
+			}
+		},
+		{
+			"path": "pages/my/dynamic",
+			"style": {
+				"navigationBarTitleText": "动态收益"
+			}
 		}
 	],
 	"tabBar": {
