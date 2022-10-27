@@ -328,13 +328,17 @@ var render = function() {
                           _c(
                             "uni-view",
                             { staticClass: _vm._$g(7, "sc"), attrs: { _i: 7 } },
-                            [_c("h3", { attrs: { _i: 8 } }, [_vm._v("ikun")])],
+                            [
+                              _c("h3", { attrs: { _i: 8 } }, [
+                                _vm._v(_vm._$g(8, "t0-0"))
+                              ])
+                            ],
                             1
                           ),
                           _c(
                             "uni-view",
                             { staticClass: _vm._$g(9, "sc"), attrs: { _i: 9 } },
-                            [_vm._v("用户账号：3043068032")]
+                            [_vm._v("账号：" + _vm._$g(9, "t0-0"))]
                           )
                         ],
                         1
@@ -6841,7 +6845,7 @@ if(false) {}
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ./node_modules/css-loader/dist/runtime/api.js */ 13);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\r\n/**\r\n * 这里是uni-app内置的常用样式变量\r\n *\r\n * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量\r\n * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App\r\n *\r\n */\r\n/**\r\n * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能\r\n *\r\n * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件\r\n */\r\n/* 颜色变量 */\r\n/* 行为相关颜色 */\r\n/* 文字基本颜色 */\r\n/* 背景颜色 */\r\n/* 边框颜色 */\r\n/* 尺寸变量 */\r\n/* 文字尺寸 */\r\n/* 图片尺寸 */\r\n/* Border Radius */\r\n/* 水平间距 */\r\n/* 垂直间距 */\r\n/* 透明度 */\r\n/* 文章场景相关 */\n.pages-invite {\r\n  width: 100%;\r\n  min-height: 100vh;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  background-color: #3972ab;\n}\n.inviteBox {\r\n  width: 600rpx;\r\n  height: 800rpx;\r\n  border-radius: 20rpx;\r\n  margin-top: 150rpx;\r\n  background-color: #3e7cba;\n}\n.inviteBox .erWeiMa {\r\n  margin: 0 auto;\r\n  margin-top: 40rpx;\r\n  margin-left: 50%;\r\n  -webkit-transform: translateX(-50%);\r\n          transform: translateX(-50%);\r\n  width: 380rpx;\r\n  height: 380rpx;\n}\n.inviteBox .tuiGuan {\r\n  width: 320rpx;\r\n  height: 60rpx;\r\n  line-height: 60rpx;\r\n  font-weight: 600;\r\n  font-size: 28rpx;\r\n  display: flex;\r\n  margin: 30rpx auto;\r\n  background-color: #d0d9fa;\r\n  border-radius: 8rpx;\n}\n.inviteBox .tuiGuan span {\r\n  width: 130rpx;\r\n  height: 58rpx;\r\n  line-height: 58rpx;\r\n  text-align: center;\r\n  font-size: 28rpx;\r\n  font-weight: 600;\n}\n.inviteBox .faxian {\r\n  width: 220rpx;\r\n  height: 40rpx;\r\n  margin: 0 auto;\r\n  line-height: 40rpx;\r\n  font-size: 24rpx;\r\n  color: #a5b0ce;\n}\n.inviteBox .faxians {\r\n  width: 380rpx;\r\n  height: 60rpx;\r\n  line-height: 60rpx;\r\n  font-size: 28rpx;\n}\n.nviteImg {\r\n  margin-top: -80rpx;\r\n  display: flex;\r\n  flex-direction: column;\r\n  justify-content: center;\r\n  align-items: center;\n}\n.nviteImg h5 {\r\n  margin-top: 20rpx;\n}\n.img {\r\n  width: 150rpx;\r\n  height: 150rpx;\r\n  border-radius: 50%;\n}\r\n", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\r\n/**\r\n * 这里是uni-app内置的常用样式变量\r\n *\r\n * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量\r\n * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App\r\n *\r\n */\r\n/**\r\n * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能\r\n *\r\n * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件\r\n */\r\n/* 颜色变量 */\r\n/* 行为相关颜色 */\r\n/* 文字基本颜色 */\r\n/* 背景颜色 */\r\n/* 边框颜色 */\r\n/* 尺寸变量 */\r\n/* 文字尺寸 */\r\n/* 图片尺寸 */\r\n/* Border Radius */\r\n/* 水平间距 */\r\n/* 垂直间距 */\r\n/* 透明度 */\r\n/* 文章场景相关 */\n.pages-invite {\r\n  width: 100%;\r\n  min-height: 100vh;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  background-color: #3972ab;\n}\n.inviteBox {\r\n  width: 600rpx;\r\n  border-radius: 20rpx;\r\n  margin-top: 150rpx;\r\n  background-color: #3e7cba;\n}\n.inviteBox .erWeiMa {\r\n  margin: 0 auto;\r\n  margin-top: 40rpx;\r\n  margin-left: 50%;\r\n  -webkit-transform: translateX(-50%);\r\n          transform: translateX(-50%);\r\n  width: 380rpx;\r\n  height: 380rpx;\n}\n.inviteBox .tuiGuan {\r\n  width: 320rpx;\r\n  height: 60rpx;\r\n  line-height: 60rpx;\r\n  font-weight: 600;\r\n  font-size: 28rpx;\r\n  display: flex;\r\n  margin: 30rpx auto;\r\n  background-color: #d0d9fa;\r\n  border-radius: 8rpx;\n}\n.inviteBox .tuiGuan span {\r\n  width: 130rpx;\r\n  height: 58rpx;\r\n  line-height: 58rpx;\r\n  text-align: center;\r\n  font-size: 28rpx;\r\n  font-weight: 600;\n}\n.inviteBox .faxian {\r\n  width: 220rpx;\r\n  height: 40rpx;\r\n  margin: 0 auto;\r\n  line-height: 40rpx;\r\n  font-size: 24rpx;\r\n  color: #a5b0ce;\n}\n.inviteBox .faxians {\r\n  width: 380rpx;\r\n  height: 60rpx;\r\n  text-align: center;\r\n  line-height: 60rpx;\r\n  font-size: 24rpx;\n}\n.nviteImg {\r\n  margin-top: -80rpx;\r\n  display: flex;\r\n  flex-direction: column;\r\n  justify-content: center;\r\n  align-items: center;\n}\n.nviteImg h5 {\r\n  margin-top: 20rpx;\n}\n.img {\r\n  width: 150rpx;\r\n  height: 150rpx;\r\n  border-radius: 50%;\n}\r\n", ""]);
 // Exports
 module.exports = exports;
 

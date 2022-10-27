@@ -103,7 +103,7 @@
 	.inviteBox {
 		// position: relative;
 		width: 600rpx;
-		height: 800rpx;
+		// height: 800rpx;
 		border-radius: 20rpx;
 		margin-top: 150rpx;
 		background-color: #3e7cba;
@@ -156,8 +156,10 @@
 		.faxians {
 			width: 380rpx;
 			height: 60rpx;
+			text-align: center;
 			line-height: 60rpx;
-			font-size: 28rpx;
+			font-size: 24rpx;
+			
 		}
 	}
 

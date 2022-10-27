@@ -6,13 +6,13 @@
 			<uni-drawer ref="showLeft" mode="left" :width="320" @change="change($event,'showLeft')">
 				<view class="drawer_top">
 					<view class="drawer_imgSize_box">
-						<image class="drawer_image" src="../../static/image/stake8.png"></image>
+						<image class="drawer_image" :src="users.avatar"></image>
 						<view class="drawer_top_size">
 							<view class="drawer_name">
-								<h3>ikun</h3>
+								<h3>{{users.nickname}}</h3>
 							</view>
 							<view class="drawer_id">
-								用户账号：3043068032
+								账号：{{users.email}}
 							</view>
 						</view>
 					</view>
@@ -203,7 +203,9 @@
 				// 总资产
 				totalAssets:0,
 				// 余额
-				balance:0
+				balance:0,
+				// 个人信息
+				users:''
 			}
 		},
 		onLoad() {
@@ -213,6 +215,8 @@
 			this.getNftByStakeId()
 			// 查询个人资产
 			this.theAsset()
+			// 查询个人信息
+			this.getInformation()
 		},
 
 		created() {
@@ -265,6 +269,19 @@
 		},
 
 		methods: {
+			// 获取个人信息
+			getInformation() {
+				app.$get('userCenter/userInfo')
+					.then(res => {
+						console.log('获取个人信息1', res.data);
+						console.log('获取个人信息', res.data.result);
+						if (res.data.status == 1) {
+							this.users = res.data.result;
+						}
+			
+					})
+			
+			},
 			// 查询资产
 			theAsset(){
 				app.$get('userCenter/getMyBalance')
@@ -647,6 +664,7 @@
 
 	.drawer_id {
 		font-size: 10px;
+		// border: 1px solid red;
 	}
 
 	.drawer_upgrade {
