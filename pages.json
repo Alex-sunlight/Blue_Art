@@ -146,6 +146,12 @@
 			"style": {
 				"navigationBarTitleText": "提现订单"
 			}
+		},
+		{
+			"path": "pages/index/uWithdrawalOrder",
+			"style": {
+				"navigationBarTitleText": "U盾提现订单"
+			}
 		}
 	],
 	"tabBar": {

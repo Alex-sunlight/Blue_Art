@@ -29,7 +29,11 @@
 			</view>
 			<view class="tiXians tiXiansg">
 				<text>手续费</text>
-				<text>{{this.withdrawType == 1? this.withdraw:this.withdraw*this.aegisAmount}}<span>USDT</span></text>
+				<view>
+				<text class="shouXu">{{this.withdrawType == 1? this.withdraw:this.withdraw*this.aegisAmount}}</text>
+				<text class="usdts">USDT</text>
+				</view>
+				
 			</view>
 		</view>
 		<view class="submitAudit" @click="audit()">
@@ -76,7 +80,14 @@
 						this.withdraw = res.data.result.config[0].withdraw_fee
 						// 手续费类型
 						this.withdrawType = res.data.result.config[0].withdraw_fee_type
-
+						
+						// if(this.withdrawType == 1){
+						// 	this.withdrawNumber = this.withdraw
+						// }else {
+						// 	this.withdraw =this.withdraw*this.aegisAmount
+						// 	this.withdrawNumber =  Math.round(this.withdraw)
+						// }
+						
 						console.log('获取提现下限', this.rechargeData);
 
 					})
@@ -319,16 +330,47 @@
 			.tiXiansg {
 				text {
 					color: #8f8f8f;
+					
 				}
 
-				text:nth-of-type(2) {
+				view {
 
-
+					width: 140rpx;
 					color: #fff;
+					display: flex;
+					
 					// span {
 					// 	color: #8f8f8f;
 					// }
+					// border: 1px solid red;
+					text {
+						
+							// display: inline-block;
+							width: 110rpx;
+							overflow: hidden;
+							color: #fff;
+							// border: 1px solid red;
+						
+					}
+					.usdts {
+						color: #fff;
+						text-align: left;
+										// display: inline-block;
+										// margin-top: -90rpx;
+										// border: 1px solid red;
+									}
 				}
+				// .shouXu {
+				// 	display: inline-block;
+				// 	width: 50rpx;
+				// 	overflow: hidden;
+				// 	border: 1px solid red;
+				// }
+				// .usdts {
+				// 	display: inline-block;
+				// 	margin-top: -90rpx;
+				// 	border: 1px solid red;
+				// }
 			}
 		}
 

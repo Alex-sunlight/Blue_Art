@@ -11,7 +11,7 @@
 							<view class="drawer_name">
 								<h3>{{users.nickname}}</h3>
 							</view>
-							<view class="drawer_id">
+							<view class="drawer_id drawer_ids">
 								账号：{{users.email}}
 							</view>
 						</view>
@@ -699,7 +699,13 @@
 }
 
 .drawer_id {
-  font-size: 10px;
+  // font-size: 30rpx;
+}
+.drawer_ids {
+	color: #fff;
+	font-size: 30rpx;
+	margin-top: 10rpx;
+	// border: 1px solid red;
 }
 
 .drawer_upgrade {
