@@ -26,7 +26,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background-color: #3972ab;
+		background-color: #24315e;
 	}
 	.certificateImg{
 		width: 600rpx;

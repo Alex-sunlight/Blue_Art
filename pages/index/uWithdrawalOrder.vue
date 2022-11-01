@@ -29,14 +29,17 @@
 				<text>
 					充值状态
 				</text>
-				<text v-if="this.prepaidData.status == 0">
-					待充值
-				</text>
 				<text v-if="this.prepaidData.status == 1">
-					充值成功
+					待处理
 				</text>
 				<text v-if="this.prepaidData.status == 2">
-					取消充值
+					打款中
+				</text>
+				<text v-if="this.prepaidData.status == 3">
+					提现成功
+				</text>
+				<text v-if="this.prepaidData.status == 4">
+					提现失败
 				</text>
 			</view>
 			<view class="detailsList">
@@ -125,7 +128,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background-color: #3972ab;
+		background-color: #2f3d6e;
 		.details {
 			width: 90%;
 			margin: 0 auto;

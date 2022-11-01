@@ -15,7 +15,7 @@
 				<image src="../../static/image/usdt.png" mode=""></image>
 				<view class="uDun">
 					<text>
-						U盾充值
+						U盾提现
 					</text>
 					<text>
 						{{item.create_at}}
@@ -25,14 +25,17 @@
 					<text>
 						{{item.ys_amount}}
 					</text>
-					<text v-if="item.status == 0">
-						待充值
-					</text>
 					<text v-if="item.status == 1">
-						充值成功
+						待处理
 					</text>
 					<text v-if="item.status == 2">
-						取消充值
+						打款中
+					</text>
+					<text v-if="item.status == 3">
+						提现成功
+					</text>
+					<text v-if="item.status == 4">
+						提现失败
 					</text>
 				</view>
 			</view>
@@ -106,7 +109,7 @@
 		display: flex;
 		flex-direction: column;
 		// align-items: center;
-		background-color: #3972ab;
+		background-color: #2f3d6e;
 		.select {
 			width: 180rpx;
 			height: 60rpx;

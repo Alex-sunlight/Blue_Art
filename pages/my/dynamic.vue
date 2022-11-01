@@ -1,6 +1,44 @@
 <template>
 	<view class="pages-dynamic">
-		<view style="width: 700rpx;padding: 20rpx;">
+		<view class="earnings">
+			<text>
+				日期
+			</text>
+			<text>
+				收益
+			</text>
+			<text>
+				领取
+			</text>
+		</view>
+		<view class="returnsBox">
+			<view class="returnsItem" v-for="(item, index) in award_type2"
+			>
+				
+				<text>
+					{{item.get_day}}
+				</text>
+				<text>
+					{{item.bonus}}
+				</text>
+				<!-- <text v-if="item.award_type == 0">
+					本金收益
+				</text>
+				<text v-if="item.award_type == 1">
+					推荐收益
+				</text>
+				<text v-if="item.award_type == 2">
+					管理收益
+				</text> -->
+				<view class="tiqu">
+					<button @click="receiveIncome(item)" :disabled="item.status ==1 ? true:false" type="primary">提取收益</button>
+				</view>
+				<!-- <text>
+					{{item.bonus}}
+				</text> -->
+				</view>
+		</view>
+		<!-- <view style="width: 700rpx;padding: 20rpx;">
 			<view v-for="(item, index) in award_type2"
 				style="width: 100%;height: 80rpx;font-size: 15rpx;padding: 5rpx 5rpx; background-color: aquamarine;display: flex;margin-top: 30rpx; justify-content: space-between;align-items: center;">
 				<view class="">
@@ -23,7 +61,7 @@
 					<button @click="receiveIncome(item)" style="font-size: 6rpx;" type="primary">提取收益</button>
 				</view>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -58,12 +96,23 @@
 			},
 			// 收取动态收益
 			receiveIncome(item) {
+				console.log('打印提取收益ID',item);
 				try {
 					app.$post('stake/receiveIncome', {
 						reward_id: item.id
 					}).then(res => {
+						console.log('打印提取收益',res);
 						if (res.data.status == 1) {
 							console.log(res, '收取动态收益')
+							uni.showToast({
+								title: res.data.info,
+								icon: "none"
+							});
+						}else {
+							uni.showToast({
+								title: res.data.info,
+								icon: "none"
+							});
 						}
 					})
 				} catch (e) {
@@ -81,6 +130,68 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background-color: #3972ab;
+		background-color: #24315e;
+		.earnings {
+			margin: 0 auto;
+			width: 99%;
+			height: 80rpx;
+			font-size: 28rpx;
+			display: flex;
+			margin-top: 40rpx;
+			// border: 1px solid red;
+			text {
+				// width: 200rpx;
+				flex: 1;
+				height: 78rpx;
+				line-height: 78rpx;
+				text-align: center;
+				color: #fff;
+				// border: 1px solid red;
+			}
+			text:nth-of-type(3) {
+				margin-left: 10rpx;
+			}
+		}
+		.returnsBox {
+			width: 96%;
+			margin: 0 auto;
+			// height: 160rpx;
+			margin-top: 30rpx;
+			border: 1px solid #c0c0c0;
+			border-radius: 6rpx;
+			background-color: #2f3d6e;
+			.returnsItem {
+				width: 100%;
+				height: 80rpx;
+				display: flex;
+				// margin: 20rpx auto;
+				// border: 1px solid green;
+				text{
+					flex: 1;
+					height: 78rpx;
+					line-height: 78rpx;
+					text-align: center;
+					color: #fff;
+					font-size: 28rpx;
+				}
+				.tiqu {
+					flex: 1;
+					height: 78rpx;
+					line-height: 78rpx;
+					text-align: center;
+					color: #fff;
+					font-size: 28rpx;
+					// border: 1px solid red;
+					button {
+						width: 160rpx;
+						height: 65rpx;
+						line-height: 65rpx;
+						margin-top: 6rpx;
+						// margin-left: 5rpx;
+						font-size: 24rpx;
+					}
+				}
+			}
+		}
 	}
 </style>

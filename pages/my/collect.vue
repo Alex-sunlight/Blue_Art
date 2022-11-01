@@ -1,16 +1,16 @@
 <template>
 	<view class="pages-collect">
-		<image src="../../static/image/moon.gif" class="topImg"></image>
+		<image src="../../static/image/faces.webp" class="topImg"></image>
 		<view class="headBox">
 			<view class="collectSize">
-				ikun
+				{{users.nickname}}
 			</view>
-			<image class="drawer_image" src="../../static/image/stake14.png"></image>
+			<image class="drawer_image" :src="users.avatar"></image>
 		</view>
 		<image v-if="!nftList" src="../../static/image/null.png" class="nullImg"></image>
 		<view class="nftBox">
 			<view v-for="(item, index) in nftList" class="nft">
-				<image :src="item.image" class="Img"></image>
+				<image :src="item.image" class="Img" @click="prepiDetails(item)"></image>
 				<view class="nameIcon">
 					<text style="color: gold;margin-left: 20rpx;">{{item.english_name}}</text>
 					<view class="nameIcon">
@@ -31,13 +31,25 @@
 	export default {
 		data() {
 			return {
-				nftList: []
+				nftList: [],
+				users:''
 			}
 		},
 		onLoad() {
 			this.getMyNftList()
+			this.getInformation()
 		},
 		methods: {
+			 // 获取个人信息
+			    getInformation() {
+			      app.$get("userCenter/userInfo").then((res) => {
+			        console.log("获取个人信息1", res.data);
+			        console.log("获取个人信息", res.data.result);
+			        if (res.data.status == 1) {
+			          this.users = res.data.result;
+			        }
+			      });
+			    },
 			getMyNftList() {
 				try {
 					app.$get('nft/getMyNftList').then(res => {
@@ -50,6 +62,17 @@
 					//TODO handle the exception
 				}
 			},
+			// 获取我的藏品
+			prepiDetails(val){
+				console.log('打印我的藏品',val);
+				let datas = {
+					id:val.token_id
+				}
+				// JSON.stringify(res.data.result.data.address)
+				uni.navigateTo({
+					url: '../../pages/my/theDetailss?data='+JSON.stringify(datas)
+				});
+			}
 		},
 	}
 </script>
@@ -68,7 +91,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background-color: #3972ab;
+		background-color: #2f3d6e;
 	}
 
 	.topImg {
@@ -114,7 +137,7 @@
 		flex-wrap: wrap;
 		justify-content: space-between;
 		align-items: top;
-		background-color: #3e7cba;
+		background-color: #24315e;
 	}
 
 	.nft {
@@ -122,7 +145,7 @@
 		height: 280rpx;
 		margin-top: 20rpx;
 		border-radius: 20rpx;
-		background-color: #fff;
+		background-color: #2f3d6e;
 	}
 
 	.Img {
@@ -140,5 +163,8 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		margin-top: 10rpx;
+		color: #fff;
+		// border: 1px solid red;
 	}
 </style>

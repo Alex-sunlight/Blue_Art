@@ -6,9 +6,22 @@
 	import lang3 from './common/lang.js';
 	import hwhLang from '@/common/hwh_language.js';
 	import zI18n from '@/uni_modules/z-paging/components/z-paging/js/z-paging-i18n'
-
+	import {
+			mapMutations
+		} from 'vuex'
 	export default {
 		onLaunch: function() {
+			
+			// 测试2222
+			// const userInfo = uni.getStorageSync('userInfo');    //同步获取本地数据
+			// console.log('打印测试用户退出APP重新登录',userInfo);
+			// 			//判断本地缓存是否存在数据
+			// 			if (userInfo !=="") {
+			// 				console.log('222',222);
+			// 				//传到vuex里面储存起来,并改变登录状态
+			// 				this.logingg(userInfo)
+			// 			}
+			
 			console.log('App Launch');
 			// const token = 'MTczNzM0OTMyOC40NjI4MzU4OjE6YzFiYzkwMzNmODAyMDRlYTA2OWVjMDM1NjIxNTZjYjQyNzdjZGZiYw==';
 			// uni.setStorageSync('token',token);
@@ -29,6 +42,10 @@
 			console.log(token);
 			if (token) {
 				app.getUserInfo()
+			}else{
+				uni.reLaunch({
+					url: '../index/index'
+				})
 			}
 		},
 		onShow: function() {
@@ -217,6 +234,7 @@
 </script>
 
 <style lang="scss">
+	@import "uview-ui/index.scss";
 	page {
 		height: 100%;
 		background: #FFFFFF;

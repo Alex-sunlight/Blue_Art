@@ -156,7 +156,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background-color: #3972ab;
+		background-color: #24315e;
 		.top-up {
 			margin: 0 auto;
 			width: 90%;

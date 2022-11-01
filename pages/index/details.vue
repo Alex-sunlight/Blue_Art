@@ -7,7 +7,28 @@
 			</view>
 			<view class="stake_information">
 				<view class="information_bottom">
-					<h3 class="h3">{{nftImg.english_name}}</h3>
+					<view class="information_names">
+						<h3 class="h3">{{nftImg.english_name}}</h3>
+						<view class="faXinLinag" style="display: flex;">
+							<view class="faxingSize">
+								发行量
+							</view>
+							<view class="math">
+								{{nftImg.has_buy}}/{{nftImg.fx_num}}
+							</view>
+						</view>
+					</view>
+					<view class="huoBi">
+						<view class="priceBox priceBoxs">
+							<image src="../../static/image/usdt.png" class="usdtIcon"></image>
+							<view class="price">
+								{{nftImg.price}}
+							</view>
+						</view>
+						<text class="cycle">质押周期: {{nftImg.days}}天</text>
+						<text class="cycle">质押日利率: {{nftImg.daily_bonus_rate}}%</text>
+					</view>
+					<!-- <h3 class="h3">{{nftImg.english_name}}</h3>
 					<view class="math_box">
 						<view style="display: flex;">
 							<view class="faxingSize">
@@ -23,7 +44,7 @@
 								{{nftImg.price}}
 							</view>
 						</view>
-					</view>
+					</view> -->
 				</view>
 			</view>
 		</view>
@@ -56,13 +77,16 @@
 			</view> -->
 			<!-- <view style="width: 100%;height: 18rpx;">
 			</view> -->
-			<button @click="buyNftToStake()" type="primary" class="details_bt">购买</button>
+			<button @click="buyNftToStake()" type="primary" class="details_bt">购买质押</button>
 		</view>
 	</view>
 </template>
 
 <script>
 	const app = getApp().globalData
+	import {
+		mapState
+	} from 'vuex';
 	export default {
 		data() {
 			return {
@@ -75,6 +99,13 @@
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
 			this.option = option
 			this.getNftSkuDetails(this.option.id)
+		},
+		computed: {
+			...mapState({
+				loginStatusg: state => state.user.loginStatus,
+				userInfog: state => state.user.userInfo,
+				// loginStatuso: state => state.user.loginStatus,
+			})
 		},
 		methods: {
 			getNftSkuDetails(option) {
@@ -93,6 +124,11 @@
 				}
 			},
 			buyNftToStake() {
+				if (this.loginStatusg == false) {
+				uni.navigateTo({
+					url: '../login/login'
+				});
+				}
 				try {
 					app.$post('stake/buyNftToStake', {
 						nft_id: this.id
@@ -111,7 +147,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.pages-details {
 		width: 100%;
 		min-height: 100vh;
@@ -119,7 +155,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background-color: #3972ab;
+		background-color: #2f3d6e;
 	}
 
 	.stake_area {
@@ -134,9 +170,52 @@
 	}
 
 	.information_bottom {
+		display: flex;
+		justify-content: space-between;
 		padding: 30rpx;
 		border-radius: 0 0 10px 10px;
 		background-color: #8f91b0;
+		// border: 1px solid red;
+		.information_names {
+			width: 200rpx;
+			height: 140rpx;
+			// border: 1px solid red;
+			.faXinLinag {
+				margin-top: 35rpx;
+			}
+		}
+		.huoBi {
+			width: 300rpx;
+			height: 140rpx;
+			display: flex;
+			flex-wrap: wrap;
+			// border: 1px solid red;
+			.priceBoxs {
+				// margin: 0 auto;
+				margin-left: 120rpx;
+				width: 60%;
+				height: 50rpx;
+				.usdtIcon {
+					width: 50rpx;
+					height: 50rpx;
+				}
+				.price {
+					// margin-top: 0px;
+					font-size: 36rpx;
+					// border: 1px solid red;
+				}
+			}
+			.cycle {
+				width: 200rpx;
+				margin-left: 80rpx;
+				margin-top: -15rpx;
+				height: 30rpx;
+				font-size: 24rpx;
+				text-align: right;
+				color: #fff;
+				// border: 1px solid red;
+			}
+		}
 	}
 
 	.uni-margin-wrap {
@@ -154,6 +233,7 @@
 	.math_box {
 		display: flex;
 		justify-content: space-between;
+		border: 1px solid red;
 	}
 
 	.faxingSize {
@@ -175,6 +255,8 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		
+		// border: 1px solid red;
 	}
 
 	.priceBoxs {
@@ -207,7 +289,8 @@
 	}
 
 	.details_bt {
-		width: 80%;
+		margin: 0 auto;
+		width: 99%;
 		font-size: 30rpx;
 	}
 

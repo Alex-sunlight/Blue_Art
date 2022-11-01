@@ -3,7 +3,11 @@
     "element-ui": "^2.15.10",
     "fucking-util": "^0.3.0",
     "fucking-util-signature-all": "^0.1.1",
-    "uview-ui": "^2.0.34",
+    "uview-ui": "^2.0.31",
     "zi18nz": "^0.0.7"
+  },
+  "devDependencies": {
+    "sass": "^1.55.0",
+    "sass-loader": "^10.3.1"
   }
 }

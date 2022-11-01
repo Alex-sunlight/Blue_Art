@@ -30,6 +30,7 @@
 </template>
 <script>
 	const app = getApp().globalData;
+	import {mapMutations} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -60,6 +61,7 @@
 			};
 		},
 		methods: {
+			...mapMutations(['logingg']),
 			// 忘记密码
 			onFindX() {
 				uni.navigateTo({
@@ -271,10 +273,11 @@
 				app.$post('user/loginPass', data)
 					.then(res => {
 						uni.hideLoading();
-						console.log('登录:', res);
+						console.log('登录信息:', res);
 						app.$tips(res.data.info);
 						if (res.data.status == 1) {
 							this.password = '';
+								this.logingg(res.data.result)
 							uni.setStorageSync('token', res.data.result.token);
 							app.getUserInfo()
 							if (res.data.result.status == 1) {

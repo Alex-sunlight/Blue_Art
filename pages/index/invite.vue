@@ -1,6 +1,6 @@
 <template>
 	<view class="pages-invite">
-		<view class="inviteBox">
+		<view class="inviteBox" >
 			<view class="nviteImg">
 				<image :src="user.avatar" class="img"></image>
 				<h5>{{user.nickname}}</h5>
@@ -85,7 +85,23 @@
 					}
 				})
 			},
-		}
+		},
+		onNavigationBarButtonTap(e) {
+		  // console.log(e.index);
+		  if (e.index == 0) {
+		    console.log("第一个按钮");
+			 uni.navigateTo({
+			  url: "../my/myQrCode",
+			});
+		    // this.showDrawer("showLeft");
+		  }
+		  // if (e.index == 1) {
+		  //   console.log("第二个按钮");
+		  //   uni.switchTab({
+		  //     url: "./index",
+		  //   });
+		  // }
+		},
 	}
 </script>
 
@@ -97,7 +113,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background-color: #3972ab;
+		background-color: #24315e;
 	}
 
 	.inviteBox {
@@ -106,7 +122,7 @@
 		// height: 800rpx;
 		border-radius: 20rpx;
 		margin-top: 150rpx;
-		background-color: #3e7cba;
+		background-color: #2f3d6e;
 
 		.erWeiMa {
 			margin: 0 auto;

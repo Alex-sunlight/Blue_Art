@@ -13,7 +13,7 @@ function secret(val) {
 	const newVal = rsa.encrypt(val, 'base64');
 	return newVal;
 };
-const baseUrl = 'http://120.232.253.88:6789';//PRO
+const baseUrl = 'http://47.243.187.16:6789';//PRO
 // const baseUrl = 'https://api.drive2.cc'; // main
 // const baseUrl = 'https://driveapi.hitoo.xyz';//DEV
 // 接口:http://47.242.54.11:8088

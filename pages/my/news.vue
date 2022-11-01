@@ -56,7 +56,7 @@
 		width: 100%;
 		min-height: 100vh;
 
-		background-color: #3972ab;
+		background-color: #2f3d6e;
 	}
 
 	.chat-custom-right {
@@ -75,6 +75,6 @@
 	}
 
 	/deep/.uni-list-chat__container {
-		background-color: #3972ab;
+		background-color: #2f3d6e;
 	}
 </style>

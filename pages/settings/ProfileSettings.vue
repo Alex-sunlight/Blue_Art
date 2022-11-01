@@ -58,6 +58,22 @@
 					}).then(res => {
 						if (res.data.status == 1) {
 							console.log(res, '修改个人信息')
+							uni.showToast({
+							    title: '修改成功',
+							    duration: 500,
+								icon:'none'
+							})
+							setTimeout(()=>{
+								uni.switchTab({
+									url:'../../pages/my/my'
+								})
+							},1000)
+						}else {
+							uni.showToast({
+							    title: res.data.info,
+							    duration: 500,
+								icon:'none'
+							})
 						}
 					})
 				} catch (e) {
@@ -93,6 +109,7 @@
 						that.avatar = res.result.url
 						console.log(res, '上传头像')
 						that.url = res.result.file_url
+					
 					}
 				})
 			},
@@ -130,7 +147,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background-color: #3972ab;
+		background-color: #24315e;
 	}
 
 	.drawer_assets {
@@ -139,7 +156,7 @@
 		margin: 20rpx 50rpx;
 		padding-top: 30rpx;
 		border-radius: 8px;
-		background-color: #3e7cba;
+		background-color: #2f3d6e;
 	}
 
 	.imgBox {

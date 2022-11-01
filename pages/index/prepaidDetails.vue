@@ -125,7 +125,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background-color: #3972ab;
+		background-color: #2f3d6e;
 		.details {
 			width: 90%;
 			margin: 0 auto;

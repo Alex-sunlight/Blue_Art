@@ -14,24 +14,24 @@
 				{{priceNumber}}USDT
 			</text>
 		</view>
-		<view class="knowThe">
+		<!-- <view class="knowThe">
 			<radio-group @change="chan" class="inp">
 			                        <label>
 			                            <radio  :value="radios"  />我知道了
 			                        </label>
 			                    </radio-group>
-		</view>
-		<view class="address" v-if="addressStatus">
+		</view> -->
+		<view class="address" >
 			<text>充值地址</text>
 			<text>{{prepaidAddress}}</text>
 			<text @click="paste(prepaidAddress)">
 				复制地址
 			</text>
 		</view>
-		<view class="topupOption">
-			<!-- <text>取消充值</text> -->
+		<!-- <view class="topupOption">
+			<text>取消充值</text>
 			<text @click="prepaids()">我已充值</text>
-		</view>
+		</view> -->
 		<view class="hasPrepaid" v-if="prepaid">
 			第三方充值需要一定时间,正在等待第三方回执
 		</view>
@@ -121,7 +121,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background-color: #3972ab;
+		background-color: #2f3d6e;
 		.instructions {
 			margin: 0 auto;
 			margin-top: 40rpx;
