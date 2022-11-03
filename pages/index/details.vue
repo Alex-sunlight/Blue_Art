@@ -97,15 +97,9 @@
 			}
 		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
+			
 			this.option = option
 			this.getNftSkuDetails(this.option.id)
-		},
-		computed: {
-			...mapState({
-				loginStatusg: state => state.user.loginStatus,
-				userInfog: state => state.user.userInfo,
-				// loginStatuso: state => state.user.loginStatus,
-			})
 		},
 		methods: {
 			getNftSkuDetails(option) {
@@ -124,10 +118,13 @@
 				}
 			},
 			buyNftToStake() {
-				if (this.loginStatusg == false) {
-				uni.navigateTo({
-					url: '../login/login'
-				});
+			
+				const token = uni.getStorageSync('token');
+				if(!token){
+					uni.navigateTo({
+						url: '../login/login'
+					});
+					return
 				}
 				try {
 					app.$post('stake/buyNftToStake', {

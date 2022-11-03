@@ -357,7 +357,7 @@
 			},
 			// 查询资产
 			theAsset() {
-				this.token = uni.getStorageSync('token');
+				const token = uni.getStorageSync('token');
 				if(!token){
 					return
 				}
@@ -514,44 +514,6 @@
 				}
 			},
 
-			// getVarsion() {
-			//   this.progressError = "";
-			//   let that = this;
-			//   let upLoadUrl = this.baseUrl + "/user/update";
-			//   let t = parseInt((new Date().getTime() / 1000).toString());
-			//   let n = Math.floor(Math.random() * 1000) + 1;
-			//   let s = "drivecar2_" + t.toString() + "_" + n;
-			//   let sign = app.secret(s);
-			//   plus.runtime.getProperty(plus.runtime.appid, function (widgetInfo) {
-			//     // console.log(widgetInfo.version);
-			//     uni.request({
-			//       url: upLoadUrl,
-			//       method: "GET",
-			//       data: {
-			//         version: widgetInfo.version,
-			//       },
-			//       header: {
-			//         sign: sign,
-			//       },
-			//       success: (result) => {
-			//         // console.log(result);
-			//         if (result.data.status == 1) {
-			//           // console.log(result.data);
-			//           that.upUrl = result.data.result.url;
-			//           if (that.upUrl != "") {
-			//             that.confirm();
-			//           } else {
-			//             uni.showTabBar();
-			//           }
-			//         }
-			//       },
-			//       fail: (e) => {
-			//         that.progressError = that.lg.drive26;
-			//         // console.log('error');
-			//       },
-			//     });
-			//   });
-			// },
 			handleClick(tab, event) {
 				// console.log(tab, event);
 			},
@@ -585,28 +547,9 @@
 				let that = this
 				plus.runtime.getProperty(plus.runtime.appid, function(widgetInfo) {
 					console.log('自动更新2', widgetInfo.version);
-					// const data = {
-					// 	recharge_id: this.prepaidData.id,
-					// };
-					// app.$post('wallet/cancelRecharge', data)
-					app
-						.$get("user/update", {
-							// stake_id: this.stake_id,
-							// page: 1,
-							// size: 10,
+					app.$get("user/update", {
 							version: widgetInfo.version,
 						})
-						// /user/update
-						// $http.request({
-						// 	url: '/member/versionUpdate',
-						// 	method: 'POST',
-						// 	header: {
-						// 		token: true
-						// 	},
-						// 	data: {
-						// 		version: widgetInfo.version,
-						// 	}
-						// })
 						.then((res) => {
 							console.log('自动更新31', res);
 							if (res.data.status == 1) {
