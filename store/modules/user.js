@@ -17,16 +17,17 @@ export default {
 				userInfo = JSON.parse(userInfo);
 				state.userInfo = userInfo;
 				state.loginStatus = true;
-				state.token = userInfo.token;
+				state.token = uni.getStorageSync('token')
 			}
 		},
 		// 登录后保存用户信息
-		logingg(state,userInfo){
-			state.userInfo = userInfo;
+		logingg(state,result){
+			state.userInfo = result.userInfo;
 			state.loginStatus = true;
-			state.token = userInfo.token;
+			state.token = result.token;
 			// 持久化存储===>把对象转换成字符串
-			uni.setStorageSync('userInfo',JSON.stringify(userInfo))
+			uni.setStorageSync('token',result.token)
+			uni.setStorageSync('userInfo',JSON.stringify(result.userInfo))
 		},
 		authen(state,authentication){
 			state.authentication = authentication
@@ -34,9 +35,10 @@ export default {
 		},
 		loginOut(state) {
 			state.loginStatus = false;
-			state.userInfo = {};
+			state.userInfo = null;
 			state.token = null;
-			uni.removeStorageSync('userInfo')
+			uni.setStorageSync('userInfo',null)
+			uni.setStorageSync('token',null)
 		}
 	},
 	actions:{}

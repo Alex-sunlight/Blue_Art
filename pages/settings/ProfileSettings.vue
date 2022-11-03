@@ -3,7 +3,7 @@
 		<view class="drawer_assets">
 			<view class="imageBox">
 				<!-- <image @click="xc()" class="drawer_image" :src="avatar"></image> -->
-				<uni-file-picker file-mediatype="image" :del-icon=false mode="grid" file-extname="png,jpg" :limit="1"
+				<uni-file-picker del-icon=false mode="grid" file-extname="png,jpg" :limit="1"
 					@progress="progress" @success="success" @fail="fail" @select="selectimg" />
 			</view>
 
@@ -29,34 +29,36 @@
 				user: [],
 				avatar: "../../static/image/stake8.png",
 				nickname: 'BlueArt',
+				userInfo:'',
+				img_url:'',
+				p_url:''
 			}
 		},
 		onLoad() {
-			this.userInfo()
+			this.userInfo = uni.getStorageSync('userInfo');  
+			this.nickname = this.userInfo.nickname
+			this.token = uni.getStorageSync('token');  
+			if(!this.token) {
+				uni.navigateTo({
+					url: '../login/login'
+				});
+				return
+			}
 		},
 		methods: {
-			// 个人信息
-			userInfo() {
-				try {
-					app.$get('userCenter/userInfo').then(res => {
-						if (res.data.status == 1) {
-							this.user = res.data.result
-							this.nickname = res.data.result.nickname
-							console.log(this.user, '个人信息')
-						}
-					})
-				} catch (e) {
-					//TODO handle the exception
-				}
-			},
+			
 			// 修改个人信息
 			editInfo() {
 				try {
+					const that = this
 					app.$post('userCenter/editInfo', {
-						nickname: this.nickname,
-						avatar: this.url
+						nickname: that.nickname,
+						avatar: that.img_url
 					}).then(res => {
 						if (res.data.status == 1) {
+							that.userInfo.avatar = that.p_url
+							that.userInfo.nickname = that.nickname
+							uni.setStorageSync('userInfo',that.userInfo);  
 							console.log(res, '修改个人信息')
 							uni.showToast({
 							    title: '修改成功',
@@ -68,6 +70,8 @@
 									url:'../../pages/my/my'
 								})
 							},1000)
+							
+							
 						}else {
 							uni.showToast({
 							    title: res.data.info,
@@ -108,7 +112,8 @@
 					if (res.status == 1) {
 						that.avatar = res.result.url
 						console.log(res, '上传头像')
-						that.url = res.result.file_url
+						that.img_url = res.result.file_url
+						that.p_url = res.result.url
 					
 					}
 				})

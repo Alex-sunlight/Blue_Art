@@ -238,14 +238,9 @@
 							this.code = '';
 							uni.setStorageSync('token', res.data.result.token);
 							app.getUserInfo()
-							if (res.data.result.status == 1) {
-								app.$next('index/active/active');
-							} else if (res.data.result.status == 2) {
-								uni.reLaunch({
-									url: '/pages/drive/drive'
-								})
-							}
-
+							uni.reLaunch({
+								url: '/pages/drive/drive'
+							})
 						}
 					})
 			},
@@ -277,17 +272,11 @@
 						app.$tips(res.data.info);
 						if (res.data.status == 1) {
 							this.password = '';
-								this.logingg(res.data.result)
 							uni.setStorageSync('token', res.data.result.token);
-							app.getUserInfo()
-							if (res.data.result.status == 1) {
-								app.$next('index/active/active');
-							} else if (res.data.result.status == 2) {
-								uni.reLaunch({
-									url: '../index/index'
-								})
-							};
-
+							uni.setStorageSync('userInfo', res.data.result.user_info);
+							uni.reLaunch({
+								url: '../index/index'
+							})
 						}
 					})
 			},

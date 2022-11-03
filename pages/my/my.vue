@@ -2,13 +2,13 @@
 	<view class="pages-my">
 		<view @click="ProfileSettings()" class="drawer_top">
 			<view class="drawer_imgSize_box">
-				<image class="drawer_image" :src="userInfoTou"></image>
+				<image class="drawer_image" :src="userInfo.avatar"></image>
 				<view class="drawer_top_size">
 					<view class="drawer_name">
-						<h3>{{userInfoName}}</h3>
+						<h3>{{userInfo.nickname}}</h3>
 					</view>
 					<view class="drawer_id drawer_ids">
-						用户账号：{{userInfoEmail}}
+						用户账号：{{userInfo.email}}
 					</view>
 				</view>
 			</view>
@@ -213,9 +213,8 @@
 				award_type2: '',
 				versionNumber: '',
 				userStroeInfo: [],
-				userInfoTou: null,
-				userInfoName: null,
-				userInfoEmail: null,
+				userInfo:'',
+				token:null,
 				money_all:0.00,
 				money_yest:0.00,
 				money_alls:0.00,
@@ -223,78 +222,41 @@
 			}
 		},
 		onLoad() {
-			// this.userInfog()
-			// 查询质押收益
+			this.userInfo = uni.getStorageSync('userInfo');  
+			this.token = uni.getStorageSync('token');  
+			if(!this.token) {
+				uni.navigateTo({
+					url: '../login/login'
+				});
+				return
+			}
 			this.getStakeReward()
 			this.getStakeReward2()
 			// 查询收益总额
 			this.getMy()
 			// 获取版本号
 			this.guanYu()
-			// 获取个人信息
-			// this.getUsrInfos()
-			// 查询收益总额
-			// this.getMyRewardsg()
-		
+			
 		},
 		onShow() {
-			// this.userInfog()
-			// 查询收益总额
-			this.getMy()
-			this.guanYu()
-		
-		},
-		computed: {
-			...mapState({
-				loginStatusg: state => state.user.loginStatus,
-				userInfo: state => state.user.userInfo,
-				// loginStatuso: state => state.user.loginStatus,
-			})
+			this.userInfo = uni.getStorageSync('userInfo');
+			this.token = uni.getStorageSync('token');  
+			if(!this.token) {
+				uni.navigateTo({
+					url: '../login/login'
+				});
+				return
+			}
 		},
 		methods: {
-			...mapMutations(['logingg']),
-			
-			// 获取个人信息
-			// getUsrInfos(){
-			// 	console.log('打印vuex个他信息2',this.userInfo);
-			// 	console.log('打印vuex个人信息',this.userInfo.userInfo);
-			// },
-			// 获取版本号
+		
 			guanYu() {
-				const userInfo = uni.getStorageSync('userInfo');    //同步获取本地数据
-				
-				console.log('打印测试用户退出APP重新登录',userInfo);
-				// console.log('打印测试用户退出APP重新登录22',users);
-							// 判断本地缓存是否存在数据
-							if (userInfo !=="") {
-								let users = JSON.parse(userInfo)
-								console.log('222',222)
-								//传到vuex里面储存起来,并改变登录状态
-								this.logingg(users)
-							}
-				
-				console.log('打印vuex个他信息2', this.userInfo);
-				console.log('打印vuex个人信息3', this.loginStatusg);
-				this.userStroeInfo = this.userInfo
-				if(this.loginStatusg == true) {
-					this.userInfoTou = this.userInfo.user_info.avatar
-					console.log('打印用户头像', this.userInfoTou);
-					this.userInfoName = this.userInfo.user_info.nickname
-					this.userInfoEmail = this.userInfo.user_info.email
-				}else {
-					console.log('测试未登录');
-					this.userInfoTou = null;
-					this.userInfoName ='暂未登录';
-					this.userInfoEmail ='暂未登录'
-				}
-				
 				const that = this
 				plus.runtime.getProperty(plus.runtime.appid, function(widgetInfo) {
 					console.log('自动更新600', widgetInfo.version);
 					that.versionNumber = widgetInfo.version;
 					console.log('版本号', that.versionNumber);
 				})
-
 			},
 			toStatic() {
 				uni.navigateTo({
@@ -338,31 +300,10 @@
 					//TODO handle the exception
 				}
 			},
-			// 个人信息
-			userInfog() {
-				try {
-					app.$get('userCenter/userInfo').then(res => {
-						if (res.data.status == 1) {
-							this.user = res.data.result
-							this.avatar = res.data.result.avatar
-							console.log(this.user, '个人信息')
-						}
-					})
-				} catch (e) {
-					//TODO handle the exception
-				}
-			},
 			ProfileSettings() {
-				console.log('11');
-				if(this.loginStatusg == false) {
-					uni.navigateTo({
-						url: '../login/login'
-					});
-				}else {
-					uni.navigateTo({
-						url: '../settings/ProfileSettings'
-					});
-				}
+				uni.navigateTo({
+					url: '../settings/ProfileSettings'
+				});
 				
 			},
 			toCollect() {

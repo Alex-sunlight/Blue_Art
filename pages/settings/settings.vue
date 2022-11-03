@@ -48,7 +48,6 @@
 
 		},
 		methods: {
-			...mapMutations(['loginOut']),
 			// 资料设置
 			ProfileSettings() {
 				uni.navigateTo({
@@ -63,22 +62,19 @@
 			},
 			// 退出登录
 			outLogin(){
-				uni.removeStorageSync('userInfo')
-				this.loginOut()
-				const res = this.loginOut;
-				if(res){
-					uni.showToast({
-						title:'退出成功',
-						icon:'none'
-					})
-					console.log('退出测试');
-					// this.loginOut();
-					setTimeout(()=>{
-							uni.switchTab({
-								url:'../../pages/index/index'
-							})
-					},1000)
-				}
+				uni.setStorageSync('userInfo',null)
+				uni.setStorageSync('token',null)
+				uni.showToast({
+					title:'退出成功',
+					icon:'none'
+				})
+				console.log('退出测试');
+				// this.loginOut();
+				setTimeout(()=>{
+						uni.switchTab({
+							url:'../../pages/index/index'
+						})
+				},1000)
 				
 			}
 		},

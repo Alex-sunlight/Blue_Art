@@ -6,22 +6,22 @@
 			<uni-drawer ref="showLeft" mode="left" :width="320" @change="change($event, 'showLeft')">
 				<view class="drawer_top" @click="ProfileSettings()">
 					<view class="drawer_imgSize_box" >
-						<image class="drawer_image" :src="userInfoTou"></image>
+						<image class="drawer_image" :src="userInfo.avatar"></image>
 						<view class="drawer_top_size">
 							<view class="drawer_name">
 
-								<h3>{{ userInfoName }}</h3>
+								<h3>{{ userInfo.nickname }}</h3>
 							</view>
 
-							<view class="drawer_id drawer_ids"> 账号：{{ userInfoEmail }} </view>
+							<view class="drawer_id drawer_ids"> 账号：{{ userInfo.email }} </view>
 						</view>
 					</view>
 					<uni-icons type="forward" size="20" color="#fff"></uni-icons>
 				</view>
 				<!-- 升级 -->
 				<view class="drawer_upgrade">
-					<h4 style="color: gold; margin-right: 120rpx">初出茅庐</h4>
-					<image src="../../static/image/medal1.png" class="drawer_medal"></image>
+					<h4 style="color: gold; margin-right: 120rpx">{{ userInfo.level_name }}</h4>
+					<image :src="'../../static/image/medal' +userInfo.account_level+ '.png'" class="drawer_medal"></image>
 				</view>
 				<!-- 资产 -->
 				<view class="drawer_assets">
@@ -232,7 +232,14 @@
 				user: [],
 				avatar: "../../static/image/stake8.png",
 				nickname: "BlueArt",
-				userInfo: app.userInfo,
+				userInfo: {
+					avatar:"../../static/image/stake8.png",
+					nickname:"未登录",
+					email:"",
+					account_level:"",
+					level_name:""
+					
+				},
 				activeName: "1",
 				indicatorDots: true,
 				autoplay: true,
@@ -281,14 +288,10 @@
 					start: true,
 					path: require('../../static/uploading.json'),
 				},
-				// 个人信息
-				userInfoTou: null,
-				userInfoName: null,
-				userInfoEmail: null,
-
 			};
 		},
 		onLoad() {
+			
 			this.getNewListByType();
 			this.getNewListByTypeGG();
 			this.getStakeProduct();
@@ -300,8 +303,7 @@
 			// getInformation()
 			// 自动更新
 			this.getVarsion()
-			// 获取本地个人信息
-			this.guanYu()
+			
 		},
 
 		created() {
@@ -324,37 +326,7 @@
 		},
 		onShow() {
 			
-			app.getUserInfo();
-			this.userInfo = app.userInfo;
-			let that = this;
-
-			uni.getStorage({
-				key: "token",
-				success: (res) => {
-					if (res) {
-						// that.getVarsion();
-					}
-				},
-				fail: () => {
-					uni.reLaunch({
-						url: "../login/login",
-					});
-				},
-			});
-			uni.getLocation({
-				isHighAccuracy: true,
-				accuracy: "best",
-				geocode: true,
-				success: (res) => {
-					app.locInfo = res;
-				},
-				fail: (err) => {
-					// console.log(err);
-				},
-			});
 			this.lg = app.getLg2();
-			// 获取本地个人信息
-			this.guanYu()
 		},
 		// 下拉刷新
 		onPullDownRefresh() {
@@ -365,120 +337,30 @@
 				uni.stopPullDownRefresh()
 			}, 1000)
 		},
-		computed: {
-			...mapState({
-				loginStatusg: state => state.user.loginStatus,
-				userInfog: state => state.user.userInfo,
-				// loginStatuso: state => state.user.loginStatus,
-			})
-		},
-		methods: {
-			
-			// 个人信息
-			userInfos() {
-				try {
-					app.$get("userCenter/userInfo").then((res) => {
-						if (res.data.status == 1) {
-							this.user = res.data.result;
-							this.avatar = res.data.result.avatar;
-							console.log(this.user, "个人信息");
-						}
-					});
-				} catch (e) {
-					//TODO handle the exception
-				}
-			},
-			// 查询资产
-			theAsset() {
-				app.$get("userCenter/getMyBalance");
-				fail: () => {
-					uni.reLaunch({
-						url: "../login/login",
-					});
-				};
-			},
-		},
-		
 
 		methods: {
-			...mapMutations(['logingg']),
-			// 获取本地个人信息
-			guanYu() {
-				const userInfo = uni.getStorageSync('userInfo'); //同步获取本地数据
-			
-				console.log('打印测试用户退出APP重新登录', userInfo);
-				// console.log('打印测试用户退出APP重新登录22',users);
-				// 判断本地缓存是否存在数据
-				if (userInfo !== "") {
-					let users = JSON.parse(userInfo)
-					console.log('222', 222)
-					//传到vuex里面储存起来,并改变登录状态
-					this.logingg(users)
-				}
-			
-				console.log('打印vuex个他信息2', this.userInfog);
-				console.log('打印vuex个人信息3', this.loginStatusg);
-				this.userStroeInfo = this.userInfo
-				if (this.loginStatusg == true) {
-					this.userInfoTou = this.userInfog.user_info.avatar
-					console.log('打印用户头像', this.userInfoTou);
-					this.userInfoName = this.userInfog.user_info.nickname
-					this.userInfoEmail = this.userInfog.user_info.email
-				} else {
-					console.log('测试未登录');
-					this.userInfoTou = null;
-					this.userInfoName = '暂未登录';
-					this.userInfoEmail = '暂未登录'
-				}
-			
-				// const that = this
-				// plus.runtime.getProperty(plus.runtime.appid, function(widgetInfo) {
-				// 	console.log('自动更新600', widgetInfo.version);
-				// 	that.versionNumber = widgetInfo.version;
-				// 	console.log('版本号', that.versionNumber);
-				// })
-			
-			},
+		
+	
 			// 判断是否登录
 			ProfileSettings() {
-				console.log('11');
-				if(this.loginStatusg == false) {
+				this.token = uni.getStorageSync('token');
+				if(!this.token) {
 					uni.navigateTo({
 						url: '../login/login'
 					});
-				}else {
-					uni.navigateTo({
-						url: '../settings/ProfileSettings'
-					});
+					return
 				}
-				
-			},
-			// 个人信息
-			userInfos() {
-				try {
-					app.$get("userCenter/userInfo").then((res) => {
-						if (res.data.status == 1) {
-							this.user = res.data.result;
-							this.avatar = res.data.result.avatar;
-							console.log(this.user, "个人信息");
-						}
-					});
-				} catch (e) {
-					//TODO handle the exception
-				}
-			},
-			// 获取个人信息
-			getInformation() {
-				app.$get("userCenter/userInfo").then((res) => {
-					console.log("获取个人信息1", res.data);
-					console.log("获取个人信息", res.data.result);
-					if (res.data.status == 1) {
-						this.users = res.data.result;
-					}
+				uni.navigateTo({
+					url: '../settings/ProfileSettings'
 				});
+				
 			},
 			// 查询资产
 			theAsset() {
+				this.token = uni.getStorageSync('token');
+				if(!token){
+					return
+				}
 				app.$get("userCenter/getMyBalance").then((res) => {
 					console.log("查询个人资产", res.data.result);
 					this.totalAssets = res.data.result.data.all_money;
@@ -678,10 +560,14 @@
 			},
 			// 打开窗口
 			showDrawer(e) {
+				
+				this.userInfo = uni.getStorageSync('userInfo');
 				this.$refs[e].open();
 			},
 			// 抽屉状态发生变化触发
 			change(e, type) {
+				
+				this.userInfo = uni.getStorageSync('userInfo');
 				console.log(
 					(type === "showLeft" ? "左窗口" : "右窗口") + (e ? "打开" : "关闭")
 				);

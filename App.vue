@@ -11,20 +11,7 @@
 		} from 'vuex'
 	export default {
 		onLaunch: function() {
-			
-			// 测试2222
-			// const userInfo = uni.getStorageSync('userInfo');    //同步获取本地数据
-			// console.log('打印测试用户退出APP重新登录',userInfo);
-			// 			//判断本地缓存是否存在数据
-			// 			if (userInfo !=="") {
-			// 				console.log('222',222);
-			// 				//传到vuex里面储存起来,并改变登录状态
-			// 				this.logingg(userInfo)
-			// 			}
-			
 			console.log('App Launch');
-			// const token = 'MTczNzM0OTMyOC40NjI4MzU4OjE6YzFiYzkwMzNmODAyMDRlYTA2OWVjMDM1NjIxNTZjYjQyNzdjZGZiYw==';
-			// uni.setStorageSync('token',token);
 			const app = getApp().globalData;
 			const os = uni.getSystemInfoSync();
 			app.osWidth = os.windowWidth; //屏幕可用宽度
@@ -38,15 +25,7 @@
 					app.setLg2(res.data)
 				}
 			})
-			let token = uni.getStorageSync('token')
-			console.log(token);
-			if (token) {
-				app.getUserInfo()
-			}else{
-				uni.reLaunch({
-					url: '../index/index'
-				})
-			}
+	
 		},
 		onShow: function() {
 			console.log('App Show')
@@ -57,21 +36,7 @@
 		globalData: {
 			mainAddress: '',
 			tabbarHeight: '36',
-			userInfo: {
-				"id": '',
-				"nickname": '',
-				"avatar_id": '',
-				"gender": '',
-				"email": '',
-				"drive_count": '',
-				"drive_time": '',
-				"drive_distance": '',
-				"password": '',
-				"wallet_id": '',
-				"invite_code": '',
-				"avatar": '',
-				"url": ''
-			},
+			userInfo: {},
 			publicKey: `-----BEGIN PUBLIC KEY-----
 			MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7FiKiZXTMt1miEgX+ZhZ677hH
 			hVQIitp/Ks08aBEIHw+lOozrR0aSZQXJ79L+Icsi2YpLbQ3QEXo0EUvlyjS0hovw
