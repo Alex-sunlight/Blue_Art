@@ -75,8 +75,8 @@ const createdPromise = (url, data = {}, method = 'GET') => {
 	// uni.setStorageSync('token','MTczOTUyMDkwOS44NjQ1MDg5OjE6M2Y3NTkwY2MzODZkNmFjZmQwZjA4ZWMwN2NhNjA1MWZmZTM4OGIxMg==')
 	// uni.setStorageSync('token','MTczOTY0Mjc2My45NTAzMDMzOjEwOjZlNzg2NmMwOTRhYjE0NzBjOTRlZjFlNGM3YzQzN2NmMjNmZmU1YTY=')
 	const token = uni.getStorageSync('token');
-	let lang = 'en_US';
-	// let lang = 'zh_CN';
+	// let lang = 'en_US';
+	let lang = 'zh_CN';
 	const langType = uni.getStorageSync('langType');
 	const t = parseInt((new Date().getTime() / 1000).toString());
 	const n = Math.floor(Math.random() * 1000) + 1;

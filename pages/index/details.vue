@@ -79,6 +79,9 @@
 			</view> -->
 			<button @click="buyNftToStake()" type="primary" class="details_bt">购买质押</button>
 		</view>
+		<view class="">
+			<u-modal :show="show" :title="shop" @cancel="cancel"  @confirm="confirm" ref="uModal" :asyncClose="true" :showCancelButton="true"></u-modal>
+		</view>
 	</view>
 </template>
 
@@ -93,7 +96,9 @@
 				math: 0,
 				nftImg: [],
 				id: '',
-				option: []
+				option: [],
+				show:false,
+				shop:''
 			}
 		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
@@ -110,11 +115,11 @@
 						if (res.data.status == 1) {
 							this.nftImg = res.data.result
 							this.id = res.data.result.id
-							console.log(res.data.result, '获取nft详情')
+							this.shop = `藏品价格为${this.nftImg.price}USDT,购买质押请确认`
 						}
 					})
 				} catch (e) {
-					//TODO handle the exception
+					
 				}
 			},
 			buyNftToStake() {
@@ -126,14 +131,38 @@
 					});
 					return
 				}
+				this.show=true;
+				
+			},
+			// 取消按钮
+			cancel(){
+				this.show= false;
+			},
+			// 确认按钮
+			confirm(){
 				try {
 					app.$post('stake/buyNftToStake', {
 						nft_id: this.id
 					}).then(res => {
 						if (res.data.status == 1) {
-							app.$tips('success')
-							this.getNftSkuDetails(this.option.id)
-							console.log(res, '获取购买nft并质押详情')
+							uni.showToast({
+								title: res.data.info,
+								icon: "none",
+								duration:3000
+							});
+							this.show=false;
+							setTimeout(()=>{
+								uni.switchTab({
+									url: './index'
+								});
+							},3000)
+						}else {
+							this.show=false;
+							uni.showToast({
+								title: res.data.info,
+								icon: "none",
+								duration:3000
+							});
 						}
 					})
 				} catch (e) {
